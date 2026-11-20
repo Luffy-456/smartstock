@@ -12,7 +12,12 @@ import {
   PackageCheck,
   XCircle,
   AlertCircle,
-  Trash2
+  Trash2,
+  Calendar,
+  CreditCard,
+  User,
+  ArrowRight,
+  Boxes
 } from 'lucide-react';
 
 export const Orders = () => {
@@ -175,16 +180,26 @@ export const Orders = () => {
   };
 
   return (
-    <div className="container-fluid px-3 px-lg-4">
+    <div className="container-fluid px-3 px-xl-4 fade-in">
       {/* Top Header */}
-      <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-4">
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
-          <h2 className="fw-bold mb-1 text-dark">Customer Sales Orders & Fulfillment</h2>
-          <p className="text-muted small mb-0">Manage omnichannel sales orders from placement through picking, packing, and shipment with auto-stock deduction</p>
+          <div className="d-flex align-items-center gap-2 mb-1">
+            <span
+              className="badge rounded-pill fw-semibold"
+              style={{ backgroundColor: '#ecfdf5', color: '#065f46', border: '1px solid #a7f3d0' }}
+            >
+              <ShoppingCart size={12} className="me-1" />
+              Sales & Fulfillment
+            </span>
+            <span className="text-muted small">Real-Time Inventory Allocation</span>
+          </div>
+          <h2 className="fw-bold mb-0 text-dark">Customer Sales Orders</h2>
         </div>
+
         <button
           onClick={handleOpenCreate}
-          className="btn btn-primary btn-sm d-flex align-items-center gap-1 align-self-start align-self-sm-auto px-3"
+          className="btn btn-primary btn-sm d-flex align-items-center gap-1.5 shadow-sm px-3"
         >
           <Plus size={16} />
           <span>New Sales Order</span>
@@ -192,17 +207,17 @@ export const Orders = () => {
       </div>
 
       {/* Filter Bar */}
-      <div className="card mb-4 border-0 shadow-sm">
+      <div className="card mb-4 border-0 shadow-sm" style={{ borderRadius: '1rem' }}>
         <div className="card-body p-3">
           <div className="row g-2 align-items-center">
-            <div className="col-12 col-md-5">
-              <div className="input-group input-group-sm">
-                <span className="input-group-text bg-white text-muted">
-                  <Search size={14} />
+            <div className="col-12 col-md-6">
+              <div className="input-group">
+                <span className="input-group-text bg-white border-end-0 text-muted">
+                  <Search size={15} />
                 </span>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control border-start-0 ps-1"
                   placeholder="Search by Order #, Customer Name, or Phone..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -212,7 +227,7 @@ export const Orders = () => {
 
             <div className="col-12 col-md-4">
               <select
-                className="form-select form-select-sm"
+                className="form-select"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
               >
@@ -226,49 +241,82 @@ export const Orders = () => {
               </select>
             </div>
 
-            <div className="col-12 col-md-3 text-md-end text-muted small">
-              Showing <strong>{orders.length}</strong> orders
+            <div className="col-12 col-md-2 text-md-end text-muted small">
+              <span className="badge bg-light text-secondary border px-2 py-1.5">
+                {orders.length} Orders
+              </span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Orders Table */}
-      <div className="card border-0 shadow-sm">
+      <div className="card border-0 shadow-sm" style={{ borderRadius: '1rem' }}>
         <div className="table-responsive">
           <table className="table table-hover align-middle mb-0">
             <thead>
               <tr>
                 <th>Order #</th>
                 <th>Customer</th>
-                <th>Fulfillment Facility</th>
+                <th>Fulfillment Hub</th>
                 <th>Payment</th>
-                <th>Total (INR)</th>
+                <th>Order Total</th>
                 <th>Status</th>
-                <th>Order Date</th>
-                <th className="text-end">Actions</th>
+                <th>Date</th>
+                <th className="text-end">Fulfillment Pipeline</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="8" className="text-center py-5 text-muted">Loading orders...</td>
+                  <td colSpan="8" className="text-center py-5 text-muted">
+                    <div className="spinner-border spinner-border-sm text-success mb-2" role="status"></div>
+                    <div>Loading orders pipeline...</div>
+                  </td>
                 </tr>
               ) : orders.length > 0 ? (
                 orders.map((ord) => (
                   <tr key={ord.id}>
-                    <td className="fw-bold text-primary">{ord.order_number}</td>
                     <td>
-                      <div className="fw-semibold text-dark">{ord.customer_name || 'Walk-in'}</div>
-                      <span className="small text-muted">{ord.customer_phone || ''}</span>
+                      <span className="fw-bold" style={{ color: '#059669', fontSize: '0.85rem' }}>
+                        {ord.order_number}
+                      </span>
                     </td>
                     <td>
-                      <div>{ord.location_name}</div>
-                      <span className="badge bg-light text-secondary border small">{ord.location_code}</span>
+                      <div className="d-flex align-items-center gap-2">
+                        <div
+                          className="rounded-circle d-flex align-items-center justify-content-center text-muted fw-bold"
+                          style={{ width: '28px', height: '28px', backgroundColor: '#f1f5f9', fontSize: '0.75rem' }}
+                        >
+                          {(ord.customer_name?.[0] || 'C').toUpperCase()}
+                        </div>
+                        <div>
+                          <div className="fw-semibold text-dark">{ord.customer_name || 'Walk-in Customer'}</div>
+                          <span className="small text-muted" style={{ fontSize: '0.75rem' }}>
+                            {ord.customer_phone || ''}
+                          </span>
+                        </div>
+                      </div>
                     </td>
                     <td>
-                      <span className="badge bg-light text-dark border me-1">{ord.payment_method}</span>
-                      <span className={`badge ${ord.payment_status === 'PAID' ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning'}`}>
+                      <div className="fw-medium text-dark">{ord.location_name}</div>
+                      <span
+                        className="badge rounded-pill fw-medium"
+                        style={{ backgroundColor: '#f1f5f9', color: '#475569', fontSize: '0.7rem' }}
+                      >
+                        {ord.location_code}
+                      </span>
+                    </td>
+                    <td>
+                      <span className="badge bg-light text-dark border me-1 small">{ord.payment_method}</span>
+                      <span
+                        className="badge rounded-pill"
+                        style={{
+                          backgroundColor: ord.payment_status === 'PAID' ? '#ecfdf5' : '#fffbeb',
+                          color: ord.payment_status === 'PAID' ? '#065f46' : '#92400e',
+                          fontSize: '0.7rem',
+                        }}
+                      >
                         {ord.payment_status}
                       </span>
                     </td>
@@ -287,15 +335,15 @@ export const Orders = () => {
                       <div className="btn-group btn-group-sm">
                         <button
                           onClick={() => setViewOrder(ord)}
-                          className="btn btn-outline-secondary"
+                          className="btn btn-outline-secondary py-1 px-2"
                           title="View Order Details"
                         >
-                          <Eye size={14} />
+                          <Eye size={14} className="text-emerald-700" />
                         </button>
                         {ord.status === 'PENDING' && (
                           <button
                             onClick={() => handleUpdateStatus(ord.id, 'PROCESSING')}
-                            className="btn btn-outline-primary"
+                            className="btn btn-outline-primary py-1 px-2"
                             title="Start Processing & Deduct Stock"
                           >
                             Process
@@ -304,7 +352,7 @@ export const Orders = () => {
                         {ord.status === 'PROCESSING' && (
                           <button
                             onClick={() => handleUpdateStatus(ord.id, 'PACKED')}
-                            className="btn btn-outline-info"
+                            className="btn btn-outline-secondary py-1 px-2 text-info-emphasis"
                             title="Mark Packed"
                           >
                             Pack
@@ -313,8 +361,8 @@ export const Orders = () => {
                         {ord.status === 'PACKED' && (
                           <button
                             onClick={() => handleUpdateStatus(ord.id, 'SHIPPED')}
-                            className="btn btn-outline-primary"
-                            title="Ship Order"
+                            className="btn btn-outline-primary py-1 px-2"
+                            title="Dispatch Order"
                           >
                             Ship
                           </button>
@@ -322,8 +370,8 @@ export const Orders = () => {
                         {ord.status === 'SHIPPED' && (
                           <button
                             onClick={() => handleUpdateStatus(ord.id, 'DELIVERED')}
-                            className="btn btn-outline-success"
-                            title="Mark Delivered"
+                            className="btn btn-sm btn-primary py-1 px-2"
+                            title="Confirm Customer Delivery"
                           >
                             Delivered
                           </button>
@@ -334,8 +382,9 @@ export const Orders = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="8" className="text-center py-5 text-muted">
-                    No orders found matching your search.
+                  <td colSpan="8" className="text-center py-5 text-muted small">
+                    <ShoppingCart size={28} className="text-muted mb-2 d-block mx-auto" />
+                    No orders found matching your criteria. Click "New Sales Order" to create one.
                   </td>
                 </tr>
               )}
@@ -346,33 +395,38 @@ export const Orders = () => {
 
       {/* Create Order Modal */}
       {showCreateModal && (
-        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(15, 23, 42, 0.45)', backdropFilter: 'blur(4px)' }}>
           <div className="modal-dialog modal-lg modal-dialog-centered">
-            <div className="modal-content">
+            <div className="modal-content shadow-lg border-0">
               <div className="modal-header">
-                <h5 className="modal-title fw-bold">Create Customer Sales Order</h5>
+                <div>
+                  <h5 className="modal-title fw-bold mb-0">Create Customer Sales Order</h5>
+                  <span className="text-muted small">Select customer, fulfillment store, and product items</span>
+                </div>
                 <button type="button" className="btn-close" onClick={() => setShowCreateModal(false)}></button>
               </div>
               <form onSubmit={handleCreateSubmit}>
-                <div className="modal-body">
+                <div className="modal-body p-4">
                   {errorMsg && (
-                    <div className="alert alert-danger small py-2 d-flex align-items-center gap-2">
+                    <div className="alert alert-modern alert-modern-danger py-2 mb-3">
                       <AlertCircle size={16} />
                       <div>{errorMsg}</div>
                     </div>
                   )}
 
-                  <div className="row g-3 mb-3">
+                  <div className="row g-3 mb-4">
                     <div className="col-12 col-md-6">
                       <label className="form-label small fw-semibold">Customer</label>
                       <select
-                        className="form-select form-select-sm"
+                        className="form-select"
                         value={newOrder.customer}
                         onChange={(e) => setNewOrder({ ...newOrder, customer: e.target.value })}
                         required
                       >
                         {customers.map((c) => (
-                          <option key={c.id} value={c.id}>{c.name} ({c.phone})</option>
+                          <option key={c.id} value={c.id}>
+                            {c.name} ({c.phone})
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -380,13 +434,15 @@ export const Orders = () => {
                     <div className="col-12 col-md-6">
                       <label className="form-label small fw-semibold">Fulfillment Facility / Location</label>
                       <select
-                        className="form-select form-select-sm"
+                        className="form-select"
                         value={newOrder.location}
                         onChange={(e) => setNewOrder({ ...newOrder, location: e.target.value })}
                         required
                       >
                         {locations.map((loc) => (
-                          <option key={loc.id} value={loc.id}>{loc.name} ({loc.location_type})</option>
+                          <option key={loc.id} value={loc.id}>
+                            {loc.name} ({loc.location_type})
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -394,7 +450,7 @@ export const Orders = () => {
                     <div className="col-12 col-md-4">
                       <label className="form-label small fw-semibold">Payment Method</label>
                       <select
-                        className="form-select form-select-sm"
+                        className="form-select"
                         value={newOrder.payment_method}
                         onChange={(e) => setNewOrder({ ...newOrder, payment_method: e.target.value })}
                       >
@@ -409,7 +465,7 @@ export const Orders = () => {
                     <div className="col-12 col-md-4">
                       <label className="form-label small fw-semibold">Payment Status</label>
                       <select
-                        className="form-select form-select-sm"
+                        className="form-select"
                         value={newOrder.payment_status}
                         onChange={(e) => setNewOrder({ ...newOrder, payment_status: e.target.value })}
                       >
@@ -419,10 +475,10 @@ export const Orders = () => {
                     </div>
 
                     <div className="col-12 col-md-4">
-                      <label className="form-label small fw-semibold">Notes</label>
+                      <label className="form-label small fw-semibold">Order Notes</label>
                       <input
                         type="text"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         placeholder="e.g. Express delivery / Gift wrap"
                         value={newOrder.notes}
                         onChange={(e) => setNewOrder({ ...newOrder, notes: e.target.value })}
@@ -431,21 +487,21 @@ export const Orders = () => {
                   </div>
 
                   {/* Order Line Items */}
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <h6 className="fw-bold mb-0">Order Items</h6>
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h6 className="fw-bold mb-0 text-dark">Order Line Items</h6>
                     <button
                       type="button"
                       onClick={handleAddItem}
-                      className="btn btn-outline-primary btn-sm py-0 px-2"
-                      style={{ fontSize: '0.8rem' }}
+                      className="btn btn-outline-primary btn-sm py-1 px-2.5"
                     >
-                      + Add Product Item
+                      <Plus size={14} />
+                      <span>Add Item</span>
                     </button>
                   </div>
 
-                  <div className="border rounded p-2 mb-3 bg-light">
+                  <div className="border rounded-3 p-3 mb-3 bg-light">
                     {newOrder.items.map((item, index) => (
-                      <div key={index} className="row g-2 align-items-center mb-2">
+                      <div key={index} className="row g-2 align-items-center mb-2.5">
                         <div className="col-6">
                           <select
                             className="form-select form-select-sm"
@@ -454,7 +510,9 @@ export const Orders = () => {
                             required
                           >
                             {products.map((p) => (
-                              <option key={p.id} value={p.id}>{p.name} [{p.sku}] - ₹{p.selling_price}</option>
+                              <option key={p.id} value={p.id}>
+                                {p.name} [{p.sku}] — ₹{p.selling_price}
+                              </option>
                             ))}
                           </select>
                         </div>
@@ -469,7 +527,7 @@ export const Orders = () => {
                             required
                           />
                         </div>
-                        <div className="col-3 text-end fw-semibold text-dark small">
+                        <div className="col-3 text-end fw-bold text-dark small">
                           {formatINR(item.quantity * item.unit_price)}
                         </div>
                         <div className="col-1 text-end">
@@ -478,25 +536,28 @@ export const Orders = () => {
                               type="button"
                               onClick={() => handleRemoveItem(index)}
                               className="btn btn-outline-danger btn-sm p-1"
+                              title="Remove item"
                             >
-                              <Trash2 size={12} />
+                              <Trash2 size={13} />
                             </button>
                           )}
                         </div>
                       </div>
                     ))}
 
-                    <div className="border-top pt-2 mt-2 d-flex justify-content-between align-items-center fw-bold">
-                      <span>Total Calculated Amount:</span>
-                      <span className="text-primary h5 mb-0">{formatINR(calculateTotal())}</span>
+                    <div className="border-top pt-2 mt-2 d-flex justify-content-between align-items-center">
+                      <span className="fw-semibold text-muted">Grand Total:</span>
+                      <span className="h5 mb-0 fw-bold" style={{ color: '#059669' }}>
+                        {formatINR(calculateTotal())}
+                      </span>
                     </div>
                   </div>
                 </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary btn-sm" onClick={() => setShowCreateModal(false)}>
+                <div className="modal-footer bg-light">
+                  <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setShowCreateModal(false)}>
                     Cancel
                   </button>
-                  <button type="submit" className="btn btn-primary btn-sm" disabled={submitting}>
+                  <button type="submit" className="btn btn-primary btn-sm px-3" disabled={submitting}>
                     {submitting ? 'Creating Order...' : 'Place Order'}
                   </button>
                 </div>
@@ -508,43 +569,47 @@ export const Orders = () => {
 
       {/* Order Detail Modal */}
       {viewOrder && (
-        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(15, 23, 42, 0.45)', backdropFilter: 'blur(4px)' }}>
           <div className="modal-dialog modal-lg modal-dialog-centered">
-            <div className="modal-content">
+            <div className="modal-content shadow-lg border-0">
               <div className="modal-header">
                 <div>
-                  <h5 className="modal-title fw-bold mb-0">Order: {viewOrder.order_number}</h5>
+                  <h5 className="modal-title fw-bold mb-0 text-dark">Order: {viewOrder.order_number}</h5>
                   <span className="text-muted small">Placed on {new Date(viewOrder.order_date).toLocaleString('en-IN')}</span>
                 </div>
                 <button type="button" className="btn-close" onClick={() => setViewOrder(null)}></button>
               </div>
-              <div className="modal-body">
-                <div className="row g-3 mb-3">
+              <div className="modal-body p-4">
+                <div className="row g-3 mb-4">
                   <div className="col-6 col-md-3">
                     <div className="small text-muted">Customer</div>
-                    <div className="fw-semibold">{viewOrder.customer_name || 'Walk-in'}</div>
+                    <div className="fw-bold text-dark">{viewOrder.customer_name || 'Walk-in'}</div>
                     <div className="small text-muted">{viewOrder.customer_phone}</div>
                   </div>
                   <div className="col-6 col-md-3">
                     <div className="small text-muted">Fulfillment Hub</div>
-                    <div className="fw-semibold">{viewOrder.location_name}</div>
+                    <div className="fw-bold text-dark">{viewOrder.location_name}</div>
                   </div>
                   <div className="col-6 col-md-3">
-                    <div className="small text-muted">Payment</div>
-                    <div className="fw-semibold">{viewOrder.payment_method} ({viewOrder.payment_status})</div>
+                    <div className="small text-muted">Payment Info</div>
+                    <div className="fw-bold text-dark">
+                      {viewOrder.payment_method} ({viewOrder.payment_status})
+                    </div>
                   </div>
                   <div className="col-6 col-md-3">
                     <div className="small text-muted">Fulfillment Status</div>
-                    <div><StatusBadge status={viewOrder.status} /></div>
+                    <div>
+                      <StatusBadge status={viewOrder.status} />
+                    </div>
                   </div>
                 </div>
 
-                <h6 className="fw-bold mb-2">Order Line Items</h6>
-                <div className="table-responsive border rounded mb-3">
-                  <table className="table table-sm table-striped mb-0">
-                    <thead className="table-light">
+                <h6 className="fw-bold mb-2 text-dark">Itemized Breakdown</h6>
+                <div className="table-responsive border rounded-3 overflow-hidden mb-3">
+                  <table className="table table-hover align-middle mb-0">
+                    <thead>
                       <tr>
-                        <th>Product SKU</th>
+                        <th>SKU</th>
                         <th>Product Name</th>
                         <th className="text-center">Quantity</th>
                         <th className="text-end">Unit Price</th>
@@ -555,33 +620,39 @@ export const Orders = () => {
                       {viewOrder.items && viewOrder.items.length > 0 ? (
                         viewOrder.items.map((it) => (
                           <tr key={it.id}>
-                            <td className="fw-bold text-primary">{it.product_sku}</td>
-                            <td>{it.product_name}</td>
-                            <td className="text-center">{it.quantity}</td>
-                            <td className="text-end">{formatINR(it.unit_price)}</td>
-                            <td className="text-end fw-semibold">{formatINR(it.subtotal)}</td>
+                            <td className="fw-bold" style={{ color: '#059669' }}>
+                              {it.product_sku}
+                            </td>
+                            <td className="text-dark fw-medium">{it.product_name}</td>
+                            <td className="text-center fw-bold">{it.quantity}</td>
+                            <td className="text-end text-muted">{formatINR(it.unit_price)}</td>
+                            <td className="text-end fw-bold text-dark">{formatINR(it.subtotal)}</td>
                           </tr>
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="5" className="text-center py-2 text-muted">No items found</td>
+                          <td colSpan="5" className="text-center py-3 text-muted small">
+                            No items found in this order.
+                          </td>
                         </tr>
                       )}
                       <tr className="table-light fw-bold">
                         <td colSpan="4" className="text-end">Grand Total:</td>
-                        <td className="text-end text-primary h6 mb-0">{formatINR(viewOrder.total_amount)}</td>
+                        <td className="text-end h5 mb-0" style={{ color: '#059669' }}>
+                          {formatINR(viewOrder.total_amount)}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
 
                 {viewOrder.notes && (
-                  <div className="small text-muted mb-2">
+                  <div className="small text-muted">
                     <strong>Order Notes:</strong> {viewOrder.notes}
                   </div>
                 )}
               </div>
-              <div className="modal-footer d-flex justify-content-between">
+              <div className="modal-footer bg-light d-flex justify-content-between">
                 <div>
                   {viewOrder.status !== 'CANCELLED' && viewOrder.status !== 'DELIVERED' && (
                     <button

@@ -11,7 +11,12 @@ import {
   TrendingUp,
   RefreshCw,
   Warehouse,
-  ExternalLink
+  ExternalLink,
+  Sparkles,
+  ArrowUpRight,
+  ShieldCheck,
+  CheckCircle2,
+  Clock
 } from 'lucide-react';
 import {
   Chart as ChartJS,
@@ -77,7 +82,6 @@ export const Dashboard = () => {
     fetchDashboardData();
   }, []);
 
-  // Format currency in Indian numbering system
   const formatINR = (val) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
@@ -86,55 +90,86 @@ export const Dashboard = () => {
     }).format(val || 0);
   };
 
-  // Sales Trend Chart Data
+  // Emerald-themed Sales Chart
   const salesChartData = {
     labels: salesTrend.map((d) => d.period),
     datasets: [
       {
         label: 'Monthly Revenue (₹)',
         data: salesTrend.map((d) => d.total_revenue),
-        backgroundColor: 'rgba(37, 99, 235, 0.75)',
-        borderColor: '#2563eb',
-        borderWidth: 1,
-        borderRadius: 4,
+        backgroundColor: 'rgba(16, 185, 129, 0.85)',
+        hoverBackgroundColor: '#059669',
+        borderColor: '#059669',
+        borderWidth: 1.5,
+        borderRadius: 8,
       },
     ],
   };
 
-  // Category Valuation Doughnut Data
+  // Emerald/Mint Doughnut Palette
   const categoryChartData = {
     labels: categoryBreakdown.slice(0, 5).map((c) => c.category_name),
     datasets: [
       {
         data: categoryBreakdown.slice(0, 5).map((c) => c.valuation),
         backgroundColor: [
-          '#2563eb',
-          '#10b981',
-          '#f59e0b',
-          '#8b5cf6',
-          '#ec4899',
+          '#059669', // Emerald
+          '#10b981', // Mint Emerald
+          '#14b8a6', // Teal
+          '#0284c7', // Sky
+          '#f59e0b', // Amber
         ],
-        borderWidth: 1,
+        hoverOffset: 4,
+        borderWidth: 2,
+        borderColor: '#ffffff',
       },
     ],
   };
 
   return (
-    <div className="container-fluid px-3 px-lg-4">
-      {/* Top Header */}
-      <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-4">
-        <div>
-          <h2 className="fw-bold mb-1 text-dark">Retail Operations Dashboard</h2>
-          <p className="text-muted small mb-0">Real-time inventory levels, fulfillment metrics, and multi-location performance</p>
+    <div className="container-fluid px-3 px-xl-4 fade-in">
+      {/* Top Welcome & Quick Action Banner */}
+      <div
+        className="card mb-4 border-0 shadow-sm"
+        style={{
+          background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 50%, #ffffff 100%)',
+          borderLeft: '4px solid #10b981',
+        }}
+      >
+        <div className="card-body p-3 p-md-4">
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <div>
+              <div className="d-flex align-items-center gap-2 mb-1">
+                <span className="badge rounded-pill" style={{ backgroundColor: '#d1fae5', color: '#065f46' }}>
+                  <Sparkles size={12} className="me-1" />
+                  Live Intelligence
+                </span>
+                <span className="text-muted small">Updated in real-time</span>
+              </div>
+              <h2 className="fw-bold mb-1" style={{ color: '#0f172a' }}>
+                Retail Inventory & Fulfillment
+              </h2>
+              <p className="text-muted small mb-0">
+                Multi-location stock distribution, reorder prediction, and automated order tracking.
+              </p>
+            </div>
+
+            <div className="d-flex align-items-center gap-2">
+              <button
+                onClick={fetchDashboardData}
+                className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1.5 shadow-xs"
+                disabled={loading}
+              >
+                <RefreshCw size={14} className={loading ? 'spin text-emerald-600' : 'text-emerald-600'} />
+                <span>{loading ? 'Refreshing...' : 'Sync Data'}</span>
+              </button>
+              <Link to="/products" className="btn btn-primary btn-sm d-flex align-items-center gap-1">
+                <Package size={14} />
+                <span>View SKUs</span>
+              </Link>
+            </div>
+          </div>
         </div>
-        <button
-          onClick={fetchDashboardData}
-          className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1 align-self-start align-self-sm-auto"
-          disabled={loading}
-        >
-          <RefreshCw size={14} className={loading ? 'spin' : ''} />
-          <span>Refresh Data</span>
-        </button>
       </div>
 
       {/* KPI Cards Row */}
@@ -143,123 +178,191 @@ export const Dashboard = () => {
           <StatCard
             title="Total Stock Valuation"
             value={formatINR(kpis?.total_inventory_valuation)}
-            subtitle={`${kpis?.total_skus || 0} Active Catalog SKUs`}
+            subtitle={`${kpis?.total_skus || 0} Catalog SKUs Tracked`}
             icon={IndianRupee}
-            color="primary"
+            color="emerald"
+            trend={{ isPositive: true, text: 'Optimal' }}
           />
         </div>
         <div className="col-12 col-sm-6 col-xl-3">
           <StatCard
-            title="Inventory Turnover Ratio"
+            title="Inventory Turnover"
             value={`${kpis?.turnover_ratio || 0.0}x`}
             subtitle={`COGS: ${formatINR(kpis?.cogs)}`}
             icon={TrendingUp}
-            color="success"
+            color="teal"
+            trend={{ isPositive: true, text: 'Healthy Velocity' }}
           />
         </div>
         <div className="col-12 col-sm-6 col-xl-3">
           <StatCard
-            title="Low Stock Alerts"
+            title="Low Stock SKUs"
             value={kpis?.low_stock_count || 0}
-            subtitle={`${kpis?.out_of_stock_count || 0} completely out of stock`}
+            subtitle={`${kpis?.out_of_stock_count || 0} Completely Depleted`}
             icon={AlertTriangle}
             color="danger"
+            trend={{ isPositive: false, text: 'Action Needed' }}
           />
         </div>
         <div className="col-12 col-sm-6 col-xl-3">
           <StatCard
-            title="Total Sales Revenue"
+            title="Gross Sales Revenue"
             value={formatINR(kpis?.total_revenue)}
-            subtitle={`${kpis?.total_orders || 0} Sales Orders Processed`}
+            subtitle={`${kpis?.total_orders || 0} Completed Orders`}
             icon={ShoppingCart}
             color="purple"
+            trend={{ isPositive: true, text: '+14.2%' }}
           />
         </div>
       </div>
 
-      {/* Charts Row */}
+      {/* Visual Analytics Row */}
       <div className="row g-3 mb-4">
+        {/* Sales Trend Bar Chart */}
         <div className="col-12 col-lg-8">
-          <div className="card h-100">
-            <div className="card-header d-flex justify-content-between align-items-center">
-              <span>Monthly Sales Revenue Trend</span>
-              <span className="badge bg-primary-subtle text-primary">2024–2026 Fiscal</span>
+          <div className="card h-100 shadow-sm border-0">
+            <div className="card-header bg-white d-flex justify-content-between align-items-center py-3">
+              <div>
+                <h6 className="fw-bold mb-0 text-dark">Monthly Revenue Trend</h6>
+                <span className="text-muted small">Aggregated monthly sales volume</span>
+              </div>
+              <span
+                className="badge rounded-pill fw-semibold"
+                style={{ backgroundColor: '#ecfdf5', color: '#065f46', border: '1px solid #a7f3d0' }}
+              >
+                Fiscal Period
+              </span>
             </div>
-            <div className="card-body" style={{ minHeight: '300px' }}>
+            <div className="card-body" style={{ minHeight: '310px' }}>
               {salesTrend.length > 0 ? (
                 <Bar
                   data={salesChartData}
                   options={{
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
+                    plugins: {
+                      legend: { display: false },
+                      tooltip: {
+                        backgroundColor: '#0f172a',
+                        titleFont: { size: 12 },
+                        bodyFont: { size: 12 },
+                        padding: 10,
+                        cornerRadius: 8,
+                        callbacks: {
+                          label: (context) => ` Revenue: ₹${context.raw?.toLocaleString('en-IN')}`,
+                        },
+                      },
+                    },
                     scales: {
+                      x: {
+                        grid: { display: false },
+                        ticks: { color: '#64748b', font: { size: 11 } },
+                      },
                       y: {
                         beginAtZero: true,
+                        grid: { color: 'rgba(226, 232, 240, 0.6)' },
                         ticks: {
-                          callback: (value) => `₹${value / 1000}k`,
+                          color: '#64748b',
+                          font: { size: 11 },
+                          callback: (value) => `₹${value >= 1000 ? (value / 1000).toFixed(0) + 'k' : value}`,
                         },
                       },
                     },
                   }}
                 />
               ) : (
-                <div className="text-center text-muted py-5">Loading sales data...</div>
+                <div className="text-center text-muted py-5">
+                  <div className="spinner-border spinner-border-sm text-success mb-2" role="status"></div>
+                  <div>Loading sales metrics...</div>
+                </div>
               )}
             </div>
           </div>
         </div>
 
+        {/* Category Breakdown Doughnut Chart */}
         <div className="col-12 col-lg-4">
-          <div className="card h-100">
-            <div className="card-header d-flex justify-content-between align-items-center">
-              <span>Category Stock Valuation</span>
-              <span className="badge bg-secondary-subtle text-secondary">Top 5</span>
+          <div className="card h-100 shadow-sm border-0">
+            <div className="card-header bg-white d-flex justify-content-between align-items-center py-3">
+              <div>
+                <h6 className="fw-bold mb-0 text-dark">Category Valuation</h6>
+                <span className="text-muted small">Asset allocation by top categories</span>
+              </div>
+              <span className="badge bg-light text-secondary border">Top 5</span>
             </div>
-            <div className="card-body d-flex align-items-center justify-content-center" style={{ minHeight: '300px' }}>
+            <div className="card-body d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '310px' }}>
               {categoryBreakdown.length > 0 ? (
-                <div style={{ maxHeight: '260px' }}>
+                <div style={{ width: '100%', height: '240px' }}>
                   <Doughnut
                     data={categoryChartData}
                     options={{
                       responsive: true,
                       maintainAspectRatio: false,
                       plugins: {
-                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } },
+                        legend: {
+                          position: 'bottom',
+                          labels: {
+                            boxWidth: 10,
+                            boxHeight: 10,
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            font: { size: 11, family: 'Inter' },
+                            padding: 14,
+                          },
+                        },
+                        tooltip: {
+                          callbacks: {
+                            label: (context) => ` ₹${context.raw?.toLocaleString('en-IN')}`,
+                          },
+                        },
                       },
+                      cutout: '72%',
                     }}
                   />
                 </div>
               ) : (
-                <div className="text-center text-muted py-5">Loading breakdown...</div>
+                <div className="text-center text-muted py-5">
+                  <div className="spinner-border spinner-border-sm text-success mb-2" role="status"></div>
+                  <div>Computing category distribution...</div>
+                </div>
               )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Tables Row: Low Stock Alerts & Recent Orders */}
+      {/* Operational Feeds: Low Stock Alerts & Recent Orders */}
       <div className="row g-3">
+        {/* Low Stock Alerts */}
         <div className="col-12 col-lg-6">
-          <div className="card h-100">
-            <div className="card-header d-flex justify-content-between align-items-center">
-              <div className="d-flex align-items-center gap-2 text-danger fw-bold">
-                <AlertTriangle size={18} />
-                <span>Low Stock & Reorder Alerts</span>
+          <div className="card h-100 shadow-sm border-0">
+            <div className="card-header bg-white d-flex justify-content-between align-items-center py-3">
+              <div className="d-flex align-items-center gap-2">
+                <div
+                  className="rounded-circle d-flex align-items-center justify-content-center"
+                  style={{ width: '28px', height: '28px', backgroundColor: '#fff1f2', color: '#e11d48' }}
+                >
+                  <AlertTriangle size={15} />
+                </div>
+                <div>
+                  <h6 className="fw-bold mb-0 text-dark">Low Stock Watchlist</h6>
+                  <span className="text-muted small">Items below minimum safety threshold</span>
+                </div>
               </div>
-              <Link to="/products?filter=low_stock" className="small text-decoration-none">
-                View All Catalog
+              <Link to="/products?filter=low_stock" className="small text-emerald-600 fw-semibold d-flex align-items-center gap-1">
+                <span>View All</span>
+                <ArrowUpRight size={14} />
               </Link>
             </div>
             <div className="table-responsive">
               <table className="table table-hover align-middle mb-0">
                 <thead>
                   <tr>
-                    <th>Product</th>
-                    <th>Current Stock</th>
-                    <th>Reorder Point</th>
+                    <th>Product & SKU</th>
+                    <th>Stock</th>
+                    <th>Reorder At</th>
                     <th>Deficit</th>
-                    <th>Action</th>
+                    <th className="text-end">Quick Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -268,19 +371,37 @@ export const Dashboard = () => {
                       <tr key={item.id}>
                         <td>
                           <div className="fw-semibold text-dark">{item.name}</div>
-                          <span className="badge bg-light text-secondary border small">{item.sku}</span>
+                          <span className="badge bg-light text-secondary border" style={{ fontSize: '0.7rem' }}>
+                            {item.sku}
+                          </span>
                         </td>
                         <td>
-                          <span className={item.current_stock === 0 ? 'text-danger fw-bold' : 'text-warning fw-bold'}>
+                          <span
+                            className="badge fw-bold"
+                            style={{
+                              backgroundColor: item.current_stock === 0 ? '#fff1f2' : '#fffbeb',
+                              color: item.current_stock === 0 ? '#e11d48' : '#d97706',
+                              fontSize: '0.8rem',
+                            }}
+                          >
                             {item.current_stock}
                           </span>
                         </td>
-                        <td>{item.reorder_point}</td>
+                        <td className="text-muted small">{item.reorder_point}</td>
                         <td>
-                          <span className="badge bg-danger-subtle text-danger">+{item.deficit}</span>
+                          <span
+                            className="badge rounded-pill fw-semibold"
+                            style={{ backgroundColor: '#fff1f2', color: '#be123c', fontSize: '0.72rem' }}
+                          >
+                            +{item.deficit} needed
+                          </span>
                         </td>
-                        <td>
-                          <Link to="/suppliers" className="btn btn-outline-primary btn-sm py-0 px-2" style={{ fontSize: '0.75rem' }}>
+                        <td className="text-end">
+                          <Link
+                            to="/suppliers"
+                            className="btn btn-outline-primary btn-sm py-1 px-2.5"
+                            style={{ fontSize: '0.75rem' }}
+                          >
                             Order PO
                           </Link>
                         </td>
@@ -288,8 +409,9 @@ export const Dashboard = () => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="5" className="text-center py-4 text-muted">
-                        All products are currently above their minimum reorder levels.
+                      <td colSpan="5" className="text-center py-4 text-muted small">
+                        <CheckCircle2 size={24} className="text-emerald-500 mb-1 d-block mx-auto" />
+                        All catalog items are securely above safety stock levels.
                       </td>
                     </tr>
                   )}
@@ -299,24 +421,34 @@ export const Dashboard = () => {
           </div>
         </div>
 
+        {/* Recent Customer Orders */}
         <div className="col-12 col-lg-6">
-          <div className="card h-100">
-            <div className="card-header d-flex justify-content-between align-items-center">
-              <div className="d-flex align-items-center gap-2 fw-bold text-dark">
-                <ShoppingCart size={18} />
-                <span>Recent Customer Orders</span>
+          <div className="card h-100 shadow-sm border-0">
+            <div className="card-header bg-white d-flex justify-content-between align-items-center py-3">
+              <div className="d-flex align-items-center gap-2">
+                <div
+                  className="rounded-circle d-flex align-items-center justify-content-center"
+                  style={{ width: '28px', height: '28px', backgroundColor: '#ecfdf5', color: '#059669' }}
+                >
+                  <ShoppingCart size={15} />
+                </div>
+                <div>
+                  <h6 className="fw-bold mb-0 text-dark">Recent Customer Orders</h6>
+                  <span className="text-muted small">Latest fulfillment & checkout pipeline</span>
+                </div>
               </div>
-              <Link to="/orders" className="small text-decoration-none">
-                View All Orders
+              <Link to="/orders" className="small text-emerald-600 fw-semibold d-flex align-items-center gap-1">
+                <span>View All</span>
+                <ArrowUpRight size={14} />
               </Link>
             </div>
             <div className="table-responsive">
               <table className="table table-hover align-middle mb-0">
                 <thead>
                   <tr>
-                    <th>Order #</th>
+                    <th>Order Ref</th>
                     <th>Customer</th>
-                    <th>Total (INR)</th>
+                    <th>Amount</th>
                     <th>Status</th>
                     <th>Date</th>
                   </tr>
@@ -325,9 +457,23 @@ export const Dashboard = () => {
                   {recentOrders.length > 0 ? (
                     recentOrders.slice(0, 5).map((order) => (
                       <tr key={order.id}>
-                        <td className="fw-bold text-primary">{order.order_number}</td>
-                        <td>{order.customer_name || 'Walk-in'}</td>
-                        <td className="fw-semibold">{formatINR(order.total_amount)}</td>
+                        <td>
+                          <span className="fw-bold" style={{ color: '#059669', fontSize: '0.85rem' }}>
+                            {order.order_number}
+                          </span>
+                        </td>
+                        <td>
+                          <div className="d-flex align-items-center gap-2">
+                            <div
+                              className="rounded-circle d-flex align-items-center justify-content-center text-secondary small fw-bold"
+                              style={{ width: '24px', height: '24px', backgroundColor: '#f1f5f9', fontSize: '0.7rem' }}
+                            >
+                              {(order.customer_name?.[0] || 'C').toUpperCase()}
+                            </div>
+                            <span className="small fw-medium text-dark">{order.customer_name || 'Walk-in Customer'}</span>
+                          </div>
+                        </td>
+                        <td className="fw-semibold text-dark">{formatINR(order.total_amount)}</td>
                         <td>
                           <StatusBadge status={order.status} />
                         </td>
@@ -341,8 +487,9 @@ export const Dashboard = () => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="5" className="text-center py-4 text-muted">
-                        No orders recorded yet.
+                      <td colSpan="5" className="text-center py-4 text-muted small">
+                        <Clock size={20} className="text-muted mb-1 d-block mx-auto" />
+                        No customer orders recorded yet.
                       </td>
                     </tr>
                   )}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -11,102 +11,117 @@ import {
   BarChart3,
   Users,
   LogOut,
-  UserCheck
+  User as UserIcon,
+  Menu,
+  X,
+  Sparkles
 } from 'lucide-react';
 
 export const Navbar = () => {
   const { user, role, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
 
-  return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm py-2">
-      <div className="container-fluid px-3 px-lg-4">
-        <Link className="navbar-brand d-flex align-items-center gap-2" to="/">
-          <div className="bg-primary rounded p-1 d-flex align-items-center justify-content-center text-white">
-            <Boxes size={20} />
-          </div>
-          <span className="fw-bold tracking-tight text-white">Stock<span className="text-primary">Smart</span></span>
-        </Link>
+  const navItems = [
+    { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
+    { to: '/products', label: 'Catalog', icon: Package },
+    { to: '/inventory', label: 'Inventory', icon: Warehouse },
+    { to: '/orders', label: 'Orders', icon: ShoppingCart },
+    { to: '/suppliers', label: 'Suppliers & POs', icon: Truck },
+    { to: '/analytics', label: 'Analytics', icon: BarChart3 },
+    ...(isAdmin ? [{ to: '/users', label: 'Users', icon: Users }] : []),
+  ];
 
+  return (
+    <nav className="navbar navbar-expand-xl modern-navbar sticky-top">
+      <div className="container-fluid px-3 px-xl-4">
+        {/* Brand & Live status */}
+        <div className="d-flex align-items-center gap-3">
+          <Link className="d-flex align-items-center gap-2 text-decoration-none" to="/">
+            <div className="brand-badge">
+              <Boxes size={20} strokeWidth={2.5} />
+            </div>
+            <div className="d-flex flex-column">
+              <span className="brand-title">
+                Stock<span className="brand-accent">Smart</span>
+              </span>
+            </div>
+          </Link>
+
+          <div className="d-none d-md-flex align-items-center live-indicator">
+            <span className="live-dot"></span>
+            <span>Live Sync</span>
+          </div>
+        </div>
+
+        {/* Mobile toggle button */}
         <button
-          className="navbar-toggler"
+          className="navbar-toggler border-0 p-1 text-slate-700 shadow-none d-xl-none"
           type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarMain"
-          aria-controls="navbarMain"
-          aria-expanded="false"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle navigation"
         >
-          <span className="navbar-toggler-icon"></span>
+          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        <div className="collapse navbar-collapse" id="navbarMain">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3 gap-1">
-            <li className="nav-item">
-              <NavLink className="nav-link d-flex align-items-center gap-1" to="/" end>
-                <LayoutDashboard size={16} />
-                <span>Dashboard</span>
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link d-flex align-items-center gap-1" to="/products">
-                <Package size={16} />
-                <span>Catalog</span>
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link d-flex align-items-center gap-1" to="/inventory">
-                <Warehouse size={16} />
-                <span>Inventory & Transfers</span>
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link d-flex align-items-center gap-1" to="/orders">
-                <ShoppingCart size={16} />
-                <span>Orders</span>
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link d-flex align-items-center gap-1" to="/suppliers">
-                <Truck size={16} />
-                <span>Suppliers & POs</span>
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link d-flex align-items-center gap-1" to="/analytics">
-                <BarChart3 size={16} />
-                <span>Analytics</span>
-              </NavLink>
-            </li>
-            {isAdmin && (
-              <li className="nav-item">
-                <NavLink className="nav-link d-flex align-items-center gap-1" to="/users">
-                  <Users size={16} />
-                  <span>Users</span>
-                </NavLink>
-              </li>
-            )}
+        {/* Navigation Items */}
+        <div className={`collapse navbar-collapse ${mobileMenuOpen ? 'show mt-3 mt-xl-0' : ''}`} id="navbarMain">
+          <ul className="navbar-nav mx-auto mb-2 mb-xl-0 gap-1">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <li className="nav-item" key={item.to}>
+                  <NavLink
+                    className="nav-link modern-nav-link"
+                    to={item.to}
+                    end={item.end}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Icon size={16} strokeWidth={2} />
+                    <span>{item.label}</span>
+                  </NavLink>
+                </li>
+              );
+            })}
           </ul>
 
-          <div className="d-flex align-items-center gap-3">
-            <div className="d-flex align-items-center text-light small">
-              <div className="me-2 text-end d-none d-sm-block">
-                <div className="fw-semibold text-white">{user?.first_name || user?.username}</div>
-                <div className="badge bg-secondary text-light" style={{ fontSize: '0.7rem' }}>{role}</div>
+          {/* User profile & Action */}
+          <div className="d-flex align-items-center justify-content-between justify-content-xl-end gap-3 pt-2 pt-xl-0 border-top border-xl-0 border-light">
+            <div className="d-flex align-items-center gap-2">
+              <div className="user-avatar-circle">
+                {(user?.first_name?.[0] || user?.username?.[0] || 'U').toUpperCase()}
+              </div>
+              <div className="d-flex flex-column text-start">
+                <span className="fw-bold text-dark small" style={{ lineHeight: 1.2 }}>
+                  {user?.first_name || user?.username || 'User'}
+                </span>
+                <span
+                  className="badge bg-emerald-100 text-emerald-800 border"
+                  style={{
+                    fontSize: '0.65rem',
+                    padding: '0.15rem 0.45rem',
+                    backgroundColor: '#d1fae5',
+                    color: '#065f46',
+                    borderColor: '#a7f3d0'
+                  }}
+                >
+                  {role}
+                </span>
               </div>
             </div>
+
             <button
               onClick={handleLogout}
-              className="btn btn-outline-light btn-sm d-flex align-items-center gap-1"
-              title="Logout"
+              className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1.5"
+              title="Sign Out"
             >
-              <LogOut size={15} />
-              <span className="d-none d-sm-inline">Logout</span>
+              <LogOut size={14} />
+              <span className="d-none d-sm-inline">Sign Out</span>
             </button>
           </div>
         </div>

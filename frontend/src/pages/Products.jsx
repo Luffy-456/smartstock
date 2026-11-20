@@ -12,7 +12,10 @@ import {
   AlertCircle,
   Warehouse,
   CheckCircle2,
-  X
+  X,
+  Sparkles,
+  Layers,
+  ArrowUpDown
 } from 'lucide-react';
 
 export const Products = () => {
@@ -154,87 +157,115 @@ export const Products = () => {
   };
 
   return (
-    <div className="container-fluid px-3 px-lg-4">
-      {/* Header */}
-      <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-4">
+    <div className="container-fluid px-3 px-xl-4 fade-in">
+      {/* Top Header */}
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
-          <h2 className="fw-bold mb-1 text-dark">Product Catalog Management</h2>
-          <p className="text-muted small mb-0">Create, edit, and organize retail inventory SKUs, categories, and pricing</p>
+          <div className="d-flex align-items-center gap-2 mb-1">
+            <span
+              className="badge rounded-pill fw-semibold"
+              style={{ backgroundColor: '#ecfdf5', color: '#065f46', border: '1px solid #a7f3d0' }}
+            >
+              <Package size={12} className="me-1" />
+              SKU Catalog
+            </span>
+            <span className="text-muted small">Real-time Stock & Margins</span>
+          </div>
+          <h2 className="fw-bold mb-0 text-dark">Product Catalog Management</h2>
         </div>
-        <button
-          onClick={handleOpenAdd}
-          className="btn btn-primary btn-sm d-flex align-items-center gap-1 align-self-start align-self-sm-auto px-3"
-        >
+
+        <button onClick={handleOpenAdd} className="btn btn-primary btn-sm d-flex align-items-center gap-1.5 shadow-sm px-3">
           <Plus size={16} />
           <span>Add New Product</span>
         </button>
       </div>
 
-      {/* Filter Bar */}
-      <div className="card mb-4 border-0 shadow-sm">
+      {/* Filter Toolbar Card */}
+      <div className="card mb-4 border-0 shadow-sm" style={{ borderRadius: '1rem' }}>
         <div className="card-body p-3">
           <div className="row g-2 align-items-center">
-            <div className="col-12 col-md-4">
-              <div className="input-group input-group-sm">
-                <span className="input-group-text bg-white text-muted">
-                  <Search size={14} />
+            {/* Search Input */}
+            <div className="col-12 col-md-5">
+              <div className="input-group">
+                <span className="input-group-text bg-white border-end-0 text-muted">
+                  <Search size={15} />
                 </span>
                 <input
                   type="text"
-                  className="form-control"
-                  placeholder="Search by SKU, Product Name..."
+                  className="form-control border-start-0 ps-1"
+                  placeholder="Search by SKU, product name..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
+                {search && (
+                  <button
+                    className="btn btn-link text-muted p-1 border-start-0 text-decoration-none"
+                    type="button"
+                    onClick={() => setSearch('')}
+                  >
+                    <X size={15} />
+                  </button>
+                )}
               </div>
             </div>
 
-            <div className="col-12 col-sm-6 col-md-3">
+            {/* Category Dropdown */}
+            <div className="col-12 col-sm-6 col-md-4">
               <select
-                className="form-select form-select-sm"
+                className="form-select"
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
-                <option value="">All Categories</option>
+                <option value="">All Categories ({categories.length})</option>
                 {categories.map((c) => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
                 ))}
               </select>
             </div>
 
-            <div className="col-12 col-sm-6 col-md-3">
-              <div className="form-check form-switch mb-0">
+            {/* Low Stock Switch & Counter */}
+            <div className="col-12 col-sm-6 col-md-3 d-flex align-items-center justify-content-between justify-content-md-end gap-2">
+              <div
+                className="form-check form-switch mb-0 d-flex align-items-center gap-2 px-2 py-1 rounded"
+                style={{ backgroundColor: lowStockOnly ? '#fff1f2' : '#f8fafc', border: '1px solid #e2e8f0' }}
+              >
                 <input
-                  className="form-check-input"
+                  className="form-check-input ms-0 me-2"
                   type="checkbox"
                   id="lowStockToggle"
                   checked={lowStockOnly}
                   onChange={(e) => setLowStockOnly(e.target.checked)}
                 />
-                <label className="form-check-label small fw-semibold text-danger" htmlFor="lowStockToggle">
-                  Show Low Stock Only
+                <label
+                  className="form-check-label small fw-semibold"
+                  htmlFor="lowStockToggle"
+                  style={{ color: lowStockOnly ? '#e11d48' : '#475569', fontSize: '0.8rem' }}
+                >
+                  Low Stock Only
                 </label>
               </div>
-            </div>
 
-            <div className="col-12 col-md-2 text-md-end text-muted small">
-              Showing <strong>{products.length}</strong> items
+              <span className="badge bg-light text-secondary border small px-2 py-1.5">
+                {products.length} Items
+              </span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Catalog Table */}
-      <div className="card border-0 shadow-sm">
+      <div className="card border-0 shadow-sm" style={{ borderRadius: '1rem' }}>
         <div className="table-responsive">
           <table className="table table-hover align-middle mb-0">
             <thead>
               <tr>
-                <th>Product Info</th>
+                <th>Product & SKU</th>
                 <th>Category</th>
                 <th>Supplier</th>
-                <th>Cost (₹)</th>
-                <th>Selling (₹)</th>
+                <th>Cost Price</th>
+                <th>Selling Price</th>
                 <th>Total Stock</th>
                 <th>Status</th>
                 <th className="text-end">Actions</th>
@@ -243,74 +274,126 @@ export const Products = () => {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="8" className="text-center py-5 text-muted">Loading product catalog...</td>
+                  <td colSpan="8" className="text-center py-5 text-muted">
+                    <div className="spinner-border spinner-border-sm text-success mb-2" role="status"></div>
+                    <div>Loading catalog SKUs...</div>
+                  </td>
                 </tr>
               ) : products.length > 0 ? (
-                products.map((p) => (
-                  <tr key={p.id}>
-                    <td>
-                      <div className="d-flex align-items-center gap-2">
-                        {p.image_url ? (
-                          <img
-                            src={p.image_url}
-                            alt={p.name}
-                            className="rounded object-fit-cover"
-                            style={{ width: '40px', height: '40px' }}
-                          />
-                        ) : (
-                          <div className="bg-light rounded d-flex align-items-center justify-content-center text-muted" style={{ width: '40px', height: '40px' }}>
-                            <Package size={20} />
+                products.map((p) => {
+                  const marginPct =
+                    p.selling_price && p.cost_price
+                      ? (((p.selling_price - p.cost_price) / p.selling_price) * 100).toFixed(0)
+                      : null;
+
+                  return (
+                    <tr key={p.id}>
+                      <td>
+                        <div className="d-flex align-items-center gap-2.5">
+                          {p.image_url ? (
+                            <img
+                              src={p.image_url}
+                              alt={p.name}
+                              className="rounded-3 object-fit-cover shadow-xs border"
+                              style={{ width: '42px', height: '42px' }}
+                            />
+                          ) : (
+                            <div
+                              className="rounded-3 d-flex align-items-center justify-content-center shadow-xs"
+                              style={{
+                                width: '42px',
+                                height: '42px',
+                                backgroundColor: '#ecfdf5',
+                                color: '#059669',
+                                border: '1px solid #d1fae5',
+                              }}
+                            >
+                              <Package size={20} />
+                            </div>
+                          )}
+                          <div>
+                            <div className="fw-bold text-dark">{p.name}</div>
+                            <span
+                              className="badge rounded-pill fw-medium"
+                              style={{
+                                backgroundColor: '#f1f5f9',
+                                color: '#475569',
+                                border: '1px solid #e2e8f0',
+                                fontSize: '0.7rem',
+                              }}
+                            >
+                              {p.sku}
+                            </span>
                           </div>
-                        )}
-                        <div>
-                          <div className="fw-semibold text-dark">{p.name}</div>
-                          <span className="badge bg-light text-secondary border small">{p.sku}</span>
                         </div>
-                      </div>
-                    </td>
-                    <td>{p.category_name}</td>
-                    <td className="small text-muted">{p.supplier_name || 'N/A'}</td>
-                    <td className="small">{formatINR(p.cost_price)}</td>
-                    <td className="fw-semibold text-dark">{formatINR(p.selling_price)}</td>
-                    <td>
-                      <div className="d-flex align-items-center gap-1">
-                        <span className={`fw-bold ${p.is_low_stock ? 'text-danger' : 'text-dark'}`}>
-                          {p.total_stock} {p.unit_of_measure}
+                      </td>
+                      <td>
+                        <span className="badge bg-light text-secondary border fw-medium" style={{ fontSize: '0.75rem' }}>
+                          {p.category_name}
                         </span>
-                        {p.is_low_stock && (
-                          <span className="badge bg-danger-subtle text-danger" title={`Reorder point: ${p.reorder_point}`}>
-                            Low
+                      </td>
+                      <td className="small text-muted">{p.supplier_name || '—'}</td>
+                      <td className="small text-muted">{formatINR(p.cost_price)}</td>
+                      <td>
+                        <div className="fw-bold text-dark">{formatINR(p.selling_price)}</div>
+                        {marginPct && (
+                          <span className="text-success small fw-medium" style={{ fontSize: '0.7rem' }}>
+                            {marginPct}% margin
                           </span>
                         )}
-                      </div>
-                    </td>
-                    <td>
-                      <StatusBadge status={p.status} />
-                    </td>
-                    <td className="text-end">
-                      <div className="btn-group btn-group-sm">
-                        <button
-                          onClick={() => handleOpenDetail(p.id)}
-                          className="btn btn-outline-secondary"
-                          title="View Inventory per Location"
-                        >
-                          <Eye size={14} />
-                        </button>
-                        <button
-                          onClick={() => handleOpenEdit(p)}
-                          className="btn btn-outline-secondary"
-                          title="Edit Product"
-                        >
-                          <Edit2 size={14} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                      </td>
+                      <td>
+                        <div className="d-flex align-items-center gap-1.5">
+                          <span
+                            className="badge fw-bold"
+                            style={{
+                              backgroundColor: p.is_low_stock ? '#fff1f2' : '#ecfdf5',
+                              color: p.is_low_stock ? '#e11d48' : '#065f46',
+                              fontSize: '0.8rem',
+                            }}
+                          >
+                            {p.total_stock} {p.unit_of_measure}
+                          </span>
+                          {p.is_low_stock && (
+                            <span
+                              className="badge rounded-pill"
+                              style={{ backgroundColor: '#ffe4e6', color: '#be123c', fontSize: '0.65rem' }}
+                              title={`Min safety threshold: ${p.reorder_point}`}
+                            >
+                              Low
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td>
+                        <StatusBadge status={p.status} />
+                      </td>
+                      <td className="text-end">
+                        <div className="btn-group btn-group-sm">
+                          <button
+                            onClick={() => handleOpenDetail(p.id)}
+                            className="btn btn-outline-secondary py-1 px-2"
+                            title="View Multi-Location Inventory Breakdown"
+                          >
+                            <Eye size={14} className="text-emerald-700" />
+                          </button>
+                          <button
+                            onClick={() => handleOpenEdit(p)}
+                            className="btn btn-outline-secondary py-1 px-2"
+                            title="Edit SKU Details"
+                          >
+                            <Edit2 size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
-                  <td colSpan="8" className="text-center py-5 text-muted">
-                    No products found matching your filter criteria.
+                  <td colSpan="8" className="text-center py-5 text-muted small">
+                    <Package size={28} className="text-muted mb-2 d-block mx-auto" />
+                    No products found matching the given filters.
                   </td>
                 </tr>
               )}
@@ -319,21 +402,24 @@ export const Products = () => {
         </div>
       </div>
 
-      {/* Add / Edit Modal */}
+      {/* Add / Edit Product Modal */}
       {showModal && (
-        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(15, 23, 42, 0.45)', backdropFilter: 'blur(4px)' }}>
           <div className="modal-dialog modal-lg modal-dialog-centered">
-            <div className="modal-content">
+            <div className="modal-content shadow-lg border-0">
               <div className="modal-header">
-                <h5 className="modal-title fw-bold">
-                  {editProduct ? `Edit Product: ${editProduct.name}` : 'Add New Product to Catalog'}
-                </h5>
+                <div>
+                  <h5 className="modal-title fw-bold mb-0">
+                    {editProduct ? `Edit Product: ${editProduct.name}` : 'Add New Product to Catalog'}
+                  </h5>
+                  <span className="text-muted small">Configure SKU specifications and thresholds</span>
+                </div>
                 <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
               </div>
               <form onSubmit={handleSave}>
-                <div className="modal-body">
+                <div className="modal-body p-4">
                   {formError && (
-                    <div className="alert alert-danger small py-2 d-flex align-items-center gap-2">
+                    <div className="alert alert-modern alert-modern-danger py-2 mb-3">
                       <AlertCircle size={16} />
                       <div>{formError}</div>
                     </div>
@@ -344,7 +430,7 @@ export const Products = () => {
                       <label className="form-label small fw-semibold">SKU Code</label>
                       <input
                         type="text"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={formData.sku}
                         onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
                         required
@@ -354,7 +440,7 @@ export const Products = () => {
                       <label className="form-label small fw-semibold">Product Name</label>
                       <input
                         type="text"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         required
@@ -364,14 +450,16 @@ export const Products = () => {
                     <div className="col-12 col-md-6">
                       <label className="form-label small fw-semibold">Category</label>
                       <select
-                        className="form-select form-select-sm"
+                        className="form-select"
                         value={formData.category}
                         onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                         required
                       >
                         <option value="">Select Category</option>
                         {categories.map((c) => (
-                          <option key={c.id} value={c.id}>{c.name}</option>
+                          <option key={c.id} value={c.id}>
+                            {c.name}
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -379,23 +467,25 @@ export const Products = () => {
                     <div className="col-12 col-md-6">
                       <label className="form-label small fw-semibold">Primary Supplier</label>
                       <select
-                        className="form-select form-select-sm"
+                        className="form-select"
                         value={formData.supplier}
                         onChange={(e) => setFormData({ ...formData, supplier: e.target.value })}
                       >
                         <option value="">No Supplier Assigned</option>
                         {suppliers.map((s) => (
-                          <option key={s.id} value={s.id}>{s.name}</option>
+                          <option key={s.id} value={s.id}>
+                            {s.name}
+                          </option>
                         ))}
                       </select>
                     </div>
 
                     <div className="col-12 col-md-4">
-                      <label className="form-label small fw-semibold">Cost Price (INR ₹)</label>
+                      <label className="form-label small fw-semibold">Cost Price (₹)</label>
                       <input
                         type="number"
                         step="0.01"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={formData.cost_price}
                         onChange={(e) => setFormData({ ...formData, cost_price: e.target.value })}
                         required
@@ -403,11 +493,11 @@ export const Products = () => {
                     </div>
 
                     <div className="col-12 col-md-4">
-                      <label className="form-label small fw-semibold">Selling Price (INR ₹)</label>
+                      <label className="form-label small fw-semibold">Selling Price (₹)</label>
                       <input
                         type="number"
                         step="0.01"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={formData.selling_price}
                         onChange={(e) => setFormData({ ...formData, selling_price: e.target.value })}
                         required
@@ -417,7 +507,7 @@ export const Products = () => {
                     <div className="col-12 col-md-4">
                       <label className="form-label small fw-semibold">Unit of Measure</label>
                       <select
-                        className="form-select form-select-sm"
+                        className="form-select"
                         value={formData.unit_of_measure}
                         onChange={(e) => setFormData({ ...formData, unit_of_measure: e.target.value })}
                       >
@@ -433,7 +523,7 @@ export const Products = () => {
                       <label className="form-label small fw-semibold">Reorder Threshold Point</label>
                       <input
                         type="number"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={formData.reorder_point}
                         onChange={(e) => setFormData({ ...formData, reorder_point: e.target.value })}
                         required
@@ -444,7 +534,7 @@ export const Products = () => {
                       <label className="form-label small fw-semibold">Safety Stock Buffer</label>
                       <input
                         type="number"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={formData.safety_stock}
                         onChange={(e) => setFormData({ ...formData, safety_stock: e.target.value })}
                         required
@@ -454,7 +544,7 @@ export const Products = () => {
                     <div className="col-12 col-md-4">
                       <label className="form-label small fw-semibold">Catalog Status</label>
                       <select
-                        className="form-select form-select-sm"
+                        className="form-select"
                         value={formData.status}
                         onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                       >
@@ -468,8 +558,8 @@ export const Products = () => {
                       <label className="form-label small fw-semibold">Image URL (Optional)</label>
                       <input
                         type="url"
-                        className="form-control form-control-sm"
-                        placeholder="https://example.com/image.jpg"
+                        className="form-control"
+                        placeholder="https://images.unsplash.com/photo-..."
                         value={formData.image_url}
                         onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
                       />
@@ -479,18 +569,18 @@ export const Products = () => {
                       <label className="form-label small fw-semibold">Description</label>
                       <textarea
                         rows="2"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                       ></textarea>
                     </div>
                   </div>
                 </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary btn-sm" onClick={() => setShowModal(false)}>
+                <div className="modal-footer bg-light">
+                  <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setShowModal(false)}>
                     Cancel
                   </button>
-                  <button type="submit" className="btn btn-primary btn-sm" disabled={saving}>
+                  <button type="submit" className="btn btn-primary btn-sm px-3" disabled={saving}>
                     {saving ? 'Saving...' : 'Save Product'}
                   </button>
                 </div>
@@ -502,46 +592,50 @@ export const Products = () => {
 
       {/* Multi-Location Detail Modal */}
       {detailProduct && (
-        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(15, 23, 42, 0.45)', backdropFilter: 'blur(4px)' }}>
           <div className="modal-dialog modal-lg modal-dialog-centered">
-            <div className="modal-content">
+            <div className="modal-content shadow-lg border-0">
               <div className="modal-header">
                 <div>
-                  <h5 className="modal-title fw-bold mb-0">{detailProduct.name}</h5>
+                  <h5 className="modal-title fw-bold mb-0 text-dark">{detailProduct.name}</h5>
                   <span className="badge bg-light text-secondary border small">{detailProduct.sku}</span>
                 </div>
                 <button type="button" className="btn-close" onClick={() => setDetailProduct(null)}></button>
               </div>
-              <div className="modal-body">
-                <div className="row g-3 mb-3">
+              <div className="modal-body p-4">
+                <div className="row g-3 mb-4">
                   <div className="col-6 col-md-3">
                     <div className="small text-muted">Category</div>
-                    <div className="fw-semibold">{detailProduct.category_name}</div>
+                    <div className="fw-bold text-dark">{detailProduct.category_name}</div>
                   </div>
                   <div className="col-6 col-md-3">
-                    <div className="small text-muted">Supplier</div>
-                    <div className="fw-semibold">{detailProduct.supplier_name || 'N/A'}</div>
+                    <div className="small text-muted">Primary Supplier</div>
+                    <div className="fw-bold text-dark">{detailProduct.supplier_name || 'N/A'}</div>
                   </div>
                   <div className="col-6 col-md-3">
-                    <div className="small text-muted">Reorder Point</div>
-                    <div className="fw-semibold">{detailProduct.reorder_point} {detailProduct.unit_of_measure}</div>
+                    <div className="small text-muted">Safety Reorder Point</div>
+                    <div className="fw-bold text-dark">
+                      {detailProduct.reorder_point} {detailProduct.unit_of_measure}
+                    </div>
                   </div>
                   <div className="col-6 col-md-3">
-                    <div className="small text-muted">Total On-Hand</div>
-                    <div className="h5 fw-bold text-primary mb-0">{detailProduct.total_stock}</div>
+                    <div className="small text-muted">Total Available Stock</div>
+                    <div className="h4 fw-bold text-emerald-600 mb-0" style={{ color: '#059669' }}>
+                      {detailProduct.total_stock}
+                    </div>
                   </div>
                 </div>
 
-                <h6 className="fw-bold mb-2 d-flex align-items-center gap-2">
-                  <Warehouse size={16} />
-                  <span>Stock Distribution Across Warehouses & Retail Stores</span>
+                <h6 className="fw-bold mb-3 d-flex align-items-center gap-2 text-dark">
+                  <Warehouse size={16} className="text-emerald-600" />
+                  <span>Warehouse & Retail Store Stock Breakdown</span>
                 </h6>
 
-                <div className="table-responsive border rounded">
-                  <table className="table table-sm table-striped mb-0">
-                    <thead className="table-light">
+                <div className="table-responsive border rounded-3 overflow-hidden">
+                  <table className="table table-hover align-middle mb-0">
+                    <thead>
                       <tr>
-                        <th>Location</th>
+                        <th>Location Name</th>
                         <th>Type</th>
                         <th>Aisle / Shelf</th>
                         <th>On Hand</th>
@@ -553,22 +647,29 @@ export const Products = () => {
                       {detailProduct.inventory_items && detailProduct.inventory_items.length > 0 ? (
                         detailProduct.inventory_items.map((item) => (
                           <tr key={item.id}>
-                            <td className="fw-semibold">{item.location_name}</td>
+                            <td className="fw-bold text-dark">{item.location_name}</td>
                             <td>
-                              <span className={`badge ${item.location_type === 'WAREHOUSE' ? 'bg-primary-subtle text-primary' : 'bg-success-subtle text-success'}`}>
+                              <span
+                                className="badge rounded-pill fw-semibold"
+                                style={{
+                                  backgroundColor: item.location_type === 'WAREHOUSE' ? '#ecfdf5' : '#eff6ff',
+                                  color: item.location_type === 'WAREHOUSE' ? '#065f46' : '#1e40af',
+                                  fontSize: '0.72rem',
+                                }}
+                              >
                                 {item.location_type}
                               </span>
                             </td>
                             <td className="text-muted small">{item.aisle_shelf || '—'}</td>
-                            <td className="fw-bold">{item.quantity_on_hand}</td>
-                            <td className="text-warning">{item.quantity_reserved}</td>
+                            <td className="fw-bold text-dark">{item.quantity_on_hand}</td>
+                            <td className="text-warning fw-semibold">{item.quantity_reserved}</td>
                             <td className="fw-bold text-success">{item.quantity_available}</td>
                           </tr>
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="6" className="text-center py-3 text-muted">
-                            No inventory records allocated for this product across locations.
+                          <td colSpan="6" className="text-center py-4 text-muted small">
+                            No warehouse allocation recorded yet for this product.
                           </td>
                         </tr>
                       )}
@@ -576,7 +677,7 @@ export const Products = () => {
                   </table>
                 </div>
               </div>
-              <div className="modal-footer">
+              <div className="modal-footer bg-light">
                 <button type="button" className="btn btn-secondary btn-sm" onClick={() => setDetailProduct(null)}>
                   Close
                 </button>

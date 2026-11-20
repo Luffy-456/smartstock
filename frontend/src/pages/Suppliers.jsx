@@ -14,7 +14,11 @@ import {
   XCircle,
   AlertCircle,
   Eye,
-  Trash2
+  Trash2,
+  Building2,
+  Package,
+  Layers,
+  ArrowRight
 } from 'lucide-react';
 
 export const Suppliers = () => {
@@ -213,27 +217,37 @@ export const Suppliers = () => {
   };
 
   return (
-    <div className="container-fluid px-3 px-lg-4">
-      {/* Header */}
-      <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-4">
+    <div className="container-fluid px-3 px-xl-4 fade-in">
+      {/* Top Header */}
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
-          <h2 className="fw-bold mb-1 text-dark">Supplier Management & Purchase Orders</h2>
-          <p className="text-muted small mb-0">Manage manufacturer relationships, delivery lead times, and replenish warehouse inventory via Purchase Orders</p>
+          <div className="d-flex align-items-center gap-2 mb-1">
+            <span
+              className="badge rounded-pill fw-semibold"
+              style={{ backgroundColor: '#ecfdf5', color: '#065f46', border: '1px solid #a7f3d0' }}
+            >
+              <Truck size={12} className="me-1" />
+              Procurement & Vendor Network
+            </span>
+            <span className="text-muted small">Automatic Restock Replenishment</span>
+          </div>
+          <h2 className="fw-bold mb-0 text-dark">Suppliers & Purchase Orders</h2>
         </div>
-        <div className="d-flex gap-2 align-self-start align-self-sm-auto">
+
+        <div className="d-flex gap-2">
           <button
             onClick={() => {
               setModalError('');
               setShowSupplierModal(true);
             }}
-            className="btn btn-outline-primary btn-sm d-flex align-items-center gap-1"
+            className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1.5 shadow-xs"
           >
-            <Plus size={14} />
+            <Plus size={14} className="text-emerald-600" />
             <span>Add Supplier</span>
           </button>
           <button
             onClick={handleOpenCreatePO}
-            className="btn btn-primary btn-sm d-flex align-items-center gap-1"
+            className="btn btn-primary btn-sm d-flex align-items-center gap-1.5 shadow-sm px-3"
           >
             <Plus size={14} />
             <span>Create Purchase Order</span>
@@ -242,36 +256,51 @@ export const Suppliers = () => {
       </div>
 
       {/* Tabs */}
-      <ul className="nav nav-pills mb-3 border-bottom pb-2 gap-1">
-        <li className="nav-item">
+      <div className="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
+        <div className="nav-pills-emerald">
           <button
-            className={`nav-link btn-sm ${activeTab === 'pos' ? 'active' : ''}`}
+            className={`nav-link ${activeTab === 'pos' ? 'active' : ''}`}
             onClick={() => setActiveTab('pos')}
           >
             Purchase Orders ({purchaseOrders.length})
           </button>
-        </li>
-        <li className="nav-item">
           <button
-            className={`nav-link btn-sm ${activeTab === 'suppliers' ? 'active' : ''}`}
+            className={`nav-link ${activeTab === 'suppliers' ? 'active' : ''}`}
             onClick={() => setActiveTab('suppliers')}
           >
             Suppliers Directory ({suppliers.length})
           </button>
-        </li>
-      </ul>
+        </div>
+
+        {activeTab === 'suppliers' && (
+          <div style={{ maxWidth: '300px', width: '100%' }}>
+            <div className="input-group input-group-sm">
+              <span className="input-group-text bg-white border-end-0 text-muted">
+                <Search size={14} />
+              </span>
+              <input
+                type="text"
+                className="form-control border-start-0 ps-1"
+                placeholder="Search suppliers..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* TAB 1: Purchase Orders */}
       {activeTab === 'pos' && (
-        <div className="card border-0 shadow-sm">
+        <div className="card border-0 shadow-sm" style={{ borderRadius: '1rem' }}>
           <div className="table-responsive">
             <table className="table table-hover align-middle mb-0">
               <thead>
                 <tr>
                   <th>PO Number</th>
                   <th>Supplier</th>
-                  <th>Destination Warehouse</th>
-                  <th>Total Cost (INR)</th>
+                  <th>Destination Hub</th>
+                  <th>Total Cost</th>
                   <th>Status</th>
                   <th>Order Date</th>
                   <th>Expected Delivery</th>
@@ -281,20 +310,32 @@ export const Suppliers = () => {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan="8" className="text-center py-5 text-muted">Loading purchase orders...</td>
+                    <td colSpan="8" className="text-center py-5 text-muted">
+                      <div className="spinner-border spinner-border-sm text-success mb-2" role="status"></div>
+                      <div>Loading purchase orders...</div>
+                    </td>
                   </tr>
                 ) : purchaseOrders.length > 0 ? (
                   purchaseOrders.map((po) => (
                     <tr key={po.id}>
-                      <td className="fw-bold text-primary">{po.po_number}</td>
+                      <td>
+                        <span className="fw-bold" style={{ color: '#059669', fontSize: '0.85rem' }}>
+                          {po.po_number}
+                        </span>
+                      </td>
                       <td>
                         <div className="fw-semibold text-dark">{po.supplier_name}</div>
                       </td>
                       <td>
-                        <div>{po.destination_name}</div>
-                        <span className="badge bg-light text-secondary border small">{po.destination_code}</span>
+                        <div className="fw-medium text-dark">{po.destination_name}</div>
+                        <span
+                          className="badge rounded-pill fw-medium"
+                          style={{ backgroundColor: '#f1f5f9', color: '#475569', fontSize: '0.7rem' }}
+                        >
+                          {po.destination_code}
+                        </span>
                       </td>
-                      <td className="fw-bold">{formatINR(po.total_amount)}</td>
+                      <td className="fw-bold text-dark">{formatINR(po.total_amount)}</td>
                       <td>
                         <StatusBadge status={po.status} />
                       </td>
@@ -312,15 +353,15 @@ export const Suppliers = () => {
                         <div className="btn-group btn-group-sm">
                           <button
                             onClick={() => setViewPO(po)}
-                            className="btn btn-outline-secondary"
+                            className="btn btn-outline-secondary py-1 px-2"
                             title="View PO Details"
                           >
-                            <Eye size={14} />
+                            <Eye size={14} className="text-emerald-700" />
                           </button>
                           {(po.status === 'ORDERED' || po.status === 'DRAFT') && (
                             <button
                               onClick={() => handleReceivePO(po.id)}
-                              className="btn btn-success btn-sm py-0 px-2"
+                              className="btn btn-sm btn-primary py-1 px-2.5"
                               style={{ fontSize: '0.75rem' }}
                               title="Receive stock into warehouse"
                             >
@@ -330,7 +371,7 @@ export const Suppliers = () => {
                           {po.status === 'ORDERED' && (
                             <button
                               onClick={() => handleCancelPO(po.id)}
-                              className="btn btn-outline-danger btn-sm py-0 px-2"
+                              className="btn btn-sm btn-outline-danger py-1 px-2"
                               style={{ fontSize: '0.75rem' }}
                             >
                               Cancel
@@ -342,8 +383,9 @@ export const Suppliers = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="8" className="text-center py-5 text-muted">
-                      No purchase orders found.
+                    <td colSpan="8" className="text-center py-5 text-muted small">
+                      <Truck size={28} className="text-muted mb-2 d-block mx-auto" />
+                      No purchase orders found. Click "Create Purchase Order" to replenish stock.
                     </td>
                   </tr>
                 )}
@@ -358,44 +400,50 @@ export const Suppliers = () => {
         <div className="row g-3">
           {suppliers.map((sup) => (
             <div key={sup.id} className="col-12 col-md-6 col-xl-4">
-              <div className="card h-100 p-3">
+              <div className="card h-100 border-0 shadow-sm p-4" style={{ borderRadius: '1rem' }}>
                 <div className="d-flex justify-content-between align-items-start mb-2">
                   <div>
-                    <h5 className="fw-bold mb-0 text-dark">{sup.name}</h5>
+                    <h5 className="fw-bold mb-1 text-dark">{sup.name}</h5>
                     <div className="small text-muted">{sup.contact_person}</div>
                   </div>
-                  <div className="d-flex align-items-center gap-1 badge bg-warning-subtle text-warning-emphasis">
-                    <Star size={12} fill="#f59e0b" color="#f59e0b" />
+                  <div
+                    className="d-flex align-items-center gap-1 badge rounded-pill px-2.5 py-1"
+                    style={{ backgroundColor: '#fffbeb', color: '#b45309', border: '1px solid #fde68a' }}
+                  >
+                    <Star size={13} fill="#f59e0b" color="#f59e0b" />
                     <span className="fw-bold">{sup.rating}</span>
                   </div>
                 </div>
 
-                <div className="small text-muted mb-2 d-flex align-items-center gap-1">
-                  <MapPin size={14} />
-                  <span>{sup.address}, {sup.city}, {sup.state}</span>
+                <div className="small text-muted mb-3 d-flex align-items-start gap-1.5">
+                  <MapPin size={14} className="text-emerald-600 flex-shrink-0 mt-0.5" />
+                  <span>
+                    {sup.address}, {sup.city}, {sup.state}
+                  </span>
                 </div>
 
                 <div className="small mb-3">
-                  <div className="d-flex align-items-center gap-1 text-muted">
-                    <Phone size={13} />
+                  <div className="d-flex align-items-center gap-1.5 text-muted mb-1">
+                    <Phone size={13} className="text-muted" />
                     <span>{sup.phone}</span>
                   </div>
-                  <div className="d-flex align-items-center gap-1 text-muted">
-                    <Mail size={13} />
+                  <div className="d-flex align-items-center gap-1.5 text-muted">
+                    <Mail size={13} className="text-muted" />
                     <span>{sup.email}</span>
                   </div>
                 </div>
 
-                <div className="border-top pt-2 mt-auto d-flex justify-content-between align-items-center small">
+                <div className="border-top pt-3 mt-auto d-flex justify-content-between align-items-center small text-muted">
                   <div>
-                    <span className="text-muted">Avg Lead Time: </span>
-                    <strong>{sup.lead_time_days} days</strong>
+                    <span>Avg Lead Time: </span>
+                    <strong className="text-dark">{sup.lead_time_days} days</strong>
                   </div>
-                  <div>
-                    <span className="badge bg-light text-secondary border">
-                      {sup.gstin || 'GST Unregistered'}
-                    </span>
-                  </div>
+                  <span
+                    className="badge rounded-pill fw-medium"
+                    style={{ backgroundColor: '#f1f5f9', color: '#475569', fontSize: '0.7rem' }}
+                  >
+                    {sup.gstin || 'GST Registered'}
+                  </span>
                 </div>
               </div>
             </div>
@@ -405,33 +453,38 @@ export const Suppliers = () => {
 
       {/* Create Purchase Order Modal */}
       {showPOModal && (
-        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(15, 23, 42, 0.45)', backdropFilter: 'blur(4px)' }}>
           <div className="modal-dialog modal-lg modal-dialog-centered">
-            <div className="modal-content">
+            <div className="modal-content shadow-lg border-0">
               <div className="modal-header">
-                <h5 className="modal-title fw-bold">Create Supplier Purchase Order</h5>
+                <div>
+                  <h5 className="modal-title fw-bold mb-0">Create Supplier Purchase Order</h5>
+                  <span className="text-muted small">Replenish central warehouse inventory from certified vendors</span>
+                </div>
                 <button type="button" className="btn-close" onClick={() => setShowPOModal(false)}></button>
               </div>
               <form onSubmit={handlePOSubmit}>
-                <div className="modal-body">
+                <div className="modal-body p-4">
                   {modalError && (
-                    <div className="alert alert-danger small py-2 d-flex align-items-center gap-2">
+                    <div className="alert alert-modern alert-modern-danger py-2 mb-3">
                       <AlertCircle size={16} />
                       <div>{modalError}</div>
                     </div>
                   )}
 
-                  <div className="row g-3 mb-3">
+                  <div className="row g-3 mb-4">
                     <div className="col-12 col-md-6">
                       <label className="form-label small fw-semibold">Supplier</label>
                       <select
-                        className="form-select form-select-sm"
+                        className="form-select"
                         value={newPO.supplier}
                         onChange={(e) => setNewPO({ ...newPO, supplier: e.target.value })}
                         required
                       >
                         {suppliers.map((s) => (
-                          <option key={s.id} value={s.id}>{s.name} ({s.city})</option>
+                          <option key={s.id} value={s.id}>
+                            {s.name} ({s.city})
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -439,13 +492,15 @@ export const Suppliers = () => {
                     <div className="col-12 col-md-6">
                       <label className="form-label small fw-semibold">Destination Facility</label>
                       <select
-                        className="form-select form-select-sm"
+                        className="form-select"
                         value={newPO.destination_location}
                         onChange={(e) => setNewPO({ ...newPO, destination_location: e.target.value })}
                         required
                       >
                         {locations.map((loc) => (
-                          <option key={loc.id} value={loc.id}>{loc.name} ({loc.location_type})</option>
+                          <option key={loc.id} value={loc.id}>
+                            {loc.name} ({loc.location_type})
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -454,7 +509,7 @@ export const Suppliers = () => {
                       <label className="form-label small fw-semibold">Expected Delivery Date</label>
                       <input
                         type="date"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={newPO.expected_delivery_date}
                         onChange={(e) => setNewPO({ ...newPO, expected_delivery_date: e.target.value })}
                       />
@@ -464,8 +519,8 @@ export const Suppliers = () => {
                       <label className="form-label small fw-semibold">Procurement Notes</label>
                       <input
                         type="text"
-                        className="form-control form-control-sm"
-                        placeholder="e.g. Bulk quarterly replenishment"
+                        className="form-control"
+                        placeholder="e.g. Bulk seasonal replenishment"
                         value={newPO.notes}
                         onChange={(e) => setNewPO({ ...newPO, notes: e.target.value })}
                       />
@@ -473,21 +528,21 @@ export const Suppliers = () => {
                   </div>
 
                   {/* PO Line Items */}
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <h6 className="fw-bold mb-0">Procurement Items</h6>
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h6 className="fw-bold mb-0 text-dark">Procurement Items</h6>
                     <button
                       type="button"
                       onClick={handleAddPOItem}
-                      className="btn btn-outline-primary btn-sm py-0 px-2"
-                      style={{ fontSize: '0.8rem' }}
+                      className="btn btn-outline-primary btn-sm py-1 px-2.5"
                     >
-                      + Add Item
+                      <Plus size={14} />
+                      <span>Add Item</span>
                     </button>
                   </div>
 
-                  <div className="border rounded p-2 mb-3 bg-light">
+                  <div className="border rounded-3 p-3 mb-3 bg-light">
                     {newPO.items.map((item, index) => (
-                      <div key={index} className="row g-2 align-items-center mb-2">
+                      <div key={index} className="row g-2 align-items-center mb-2.5">
                         <div className="col-6">
                           <select
                             className="form-select form-select-sm"
@@ -496,7 +551,9 @@ export const Suppliers = () => {
                             required
                           >
                             {products.map((p) => (
-                              <option key={p.id} value={p.id}>{p.name} [{p.sku}] - Cost: ₹{p.cost_price}</option>
+                              <option key={p.id} value={p.id}>
+                                {p.name} [{p.sku}] — Cost: ₹{p.cost_price}
+                              </option>
                             ))}
                           </select>
                         </div>
@@ -511,7 +568,7 @@ export const Suppliers = () => {
                             required
                           />
                         </div>
-                        <div className="col-3 text-end fw-semibold text-dark small">
+                        <div className="col-3 text-end fw-bold text-dark small">
                           {formatINR(item.quantity_ordered * item.unit_cost)}
                         </div>
                         <div className="col-1 text-end">
@@ -520,25 +577,28 @@ export const Suppliers = () => {
                               type="button"
                               onClick={() => handleRemovePOItem(index)}
                               className="btn btn-outline-danger btn-sm p-1"
+                              title="Remove item"
                             >
-                              <Trash2 size={12} />
+                              <Trash2 size={13} />
                             </button>
                           )}
                         </div>
                       </div>
                     ))}
 
-                    <div className="border-top pt-2 mt-2 d-flex justify-content-between align-items-center fw-bold">
-                      <span>Total Procurement Cost:</span>
-                      <span className="text-primary h5 mb-0">{formatINR(calculatePOTotal())}</span>
+                    <div className="border-top pt-2 mt-2 d-flex justify-content-between align-items-center">
+                      <span className="fw-semibold text-muted">Total Procurement Cost:</span>
+                      <span className="h5 mb-0 fw-bold" style={{ color: '#059669' }}>
+                        {formatINR(calculatePOTotal())}
+                      </span>
                     </div>
                   </div>
                 </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary btn-sm" onClick={() => setShowPOModal(false)}>
+                <div className="modal-footer bg-light">
+                  <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setShowPOModal(false)}>
                     Cancel
                   </button>
-                  <button type="submit" className="btn btn-primary btn-sm" disabled={submitting}>
+                  <button type="submit" className="btn btn-primary btn-sm px-3" disabled={submitting}>
                     {submitting ? 'Placing Order...' : 'Submit Purchase Order'}
                   </button>
                 </div>
@@ -550,36 +610,42 @@ export const Suppliers = () => {
 
       {/* Add Supplier Modal */}
       {showSupplierModal && (
-        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(15, 23, 42, 0.45)', backdropFilter: 'blur(4px)' }}>
           <div className="modal-dialog modal-md modal-dialog-centered">
-            <div className="modal-content">
+            <div className="modal-content shadow-lg border-0">
               <div className="modal-header">
-                <h5 className="modal-title fw-bold">Register New Supplier</h5>
+                <div>
+                  <h5 className="modal-title fw-bold mb-0">Register New Supplier</h5>
+                  <span className="text-muted small">Enter vendor commercial specifications</span>
+                </div>
                 <button type="button" className="btn-close" onClick={() => setShowSupplierModal(false)}></button>
               </div>
               <form onSubmit={handleSupplierSubmit}>
-                <div className="modal-body">
+                <div className="modal-body p-4">
                   {modalError && (
-                    <div className="alert alert-danger small py-2">{modalError}</div>
+                    <div className="alert alert-modern alert-modern-danger py-2 mb-3">
+                      <AlertCircle size={16} />
+                      <div>{modalError}</div>
+                    </div>
                   )}
 
-                  <div className="mb-2">
+                  <div className="mb-3">
                     <label className="form-label small fw-semibold">Supplier Company Name</label>
                     <input
                       type="text"
-                      className="form-control form-control-sm"
+                      className="form-control"
                       value={supplierForm.name}
                       onChange={(e) => setSupplierForm({ ...supplierForm, name: e.target.value })}
                       required
                     />
                   </div>
 
-                  <div className="row g-2 mb-2">
+                  <div className="row g-2 mb-3">
                     <div className="col-6">
                       <label className="form-label small fw-semibold">Contact Person</label>
                       <input
                         type="text"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={supplierForm.contact_person}
                         onChange={(e) => setSupplierForm({ ...supplierForm, contact_person: e.target.value })}
                         required
@@ -589,7 +655,7 @@ export const Suppliers = () => {
                       <label className="form-label small fw-semibold">Phone Number</label>
                       <input
                         type="text"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={supplierForm.phone}
                         onChange={(e) => setSupplierForm({ ...supplierForm, phone: e.target.value })}
                         required
@@ -597,34 +663,34 @@ export const Suppliers = () => {
                     </div>
                   </div>
 
-                  <div className="mb-2">
+                  <div className="mb-3">
                     <label className="form-label small fw-semibold">Email Address</label>
                     <input
                       type="email"
-                      className="form-control form-control-sm"
+                      className="form-control"
                       value={supplierForm.email}
                       onChange={(e) => setSupplierForm({ ...supplierForm, email: e.target.value })}
                       required
                     />
                   </div>
 
-                  <div className="mb-2">
+                  <div className="mb-3">
                     <label className="form-label small fw-semibold">Street Address</label>
                     <input
                       type="text"
-                      className="form-control form-control-sm"
+                      className="form-control"
                       value={supplierForm.address}
                       onChange={(e) => setSupplierForm({ ...supplierForm, address: e.target.value })}
                       required
                     />
                   </div>
 
-                  <div className="row g-2 mb-2">
+                  <div className="row g-2 mb-3">
                     <div className="col-6">
                       <label className="form-label small fw-semibold">City</label>
                       <input
                         type="text"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={supplierForm.city}
                         onChange={(e) => setSupplierForm({ ...supplierForm, city: e.target.value })}
                         required
@@ -634,7 +700,7 @@ export const Suppliers = () => {
                       <label className="form-label small fw-semibold">State</label>
                       <input
                         type="text"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={supplierForm.state}
                         onChange={(e) => setSupplierForm({ ...supplierForm, state: e.target.value })}
                         required
@@ -642,12 +708,12 @@ export const Suppliers = () => {
                     </div>
                   </div>
 
-                  <div className="row g-2 mb-2">
+                  <div className="row g-2 mb-3">
                     <div className="col-6">
                       <label className="form-label small fw-semibold">GSTIN</label>
                       <input
                         type="text"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={supplierForm.gstin}
                         onChange={(e) => setSupplierForm({ ...supplierForm, gstin: e.target.value })}
                       />
@@ -657,7 +723,7 @@ export const Suppliers = () => {
                       <input
                         type="number"
                         min="1"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={supplierForm.lead_time_days}
                         onChange={(e) => setSupplierForm({ ...supplierForm, lead_time_days: parseInt(e.target.value) || 7 })}
                         required
@@ -665,11 +731,11 @@ export const Suppliers = () => {
                     </div>
                   </div>
                 </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary btn-sm" onClick={() => setShowSupplierModal(false)}>
+                <div className="modal-footer bg-light">
+                  <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setShowSupplierModal(false)}>
                     Cancel
                   </button>
-                  <button type="submit" className="btn btn-primary btn-sm" disabled={submitting}>
+                  <button type="submit" className="btn btn-primary btn-sm px-3" disabled={submitting}>
                     {submitting ? 'Registering...' : 'Register Supplier'}
                   </button>
                 </div>
@@ -681,42 +747,48 @@ export const Suppliers = () => {
 
       {/* PO View Modal */}
       {viewPO && (
-        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(15, 23, 42, 0.45)', backdropFilter: 'blur(4px)' }}>
           <div className="modal-dialog modal-lg modal-dialog-centered">
-            <div className="modal-content">
+            <div className="modal-content shadow-lg border-0">
               <div className="modal-header">
                 <div>
-                  <h5 className="modal-title fw-bold mb-0">Purchase Order: {viewPO.po_number}</h5>
+                  <h5 className="modal-title fw-bold mb-0 text-dark">Purchase Order: {viewPO.po_number}</h5>
                   <span className="text-muted small">Placed on {new Date(viewPO.order_date).toLocaleString('en-IN')}</span>
                 </div>
                 <button type="button" className="btn-close" onClick={() => setViewPO(null)}></button>
               </div>
-              <div className="modal-body">
-                <div className="row g-3 mb-3">
+              <div className="modal-body p-4">
+                <div className="row g-3 mb-4">
                   <div className="col-6 col-md-3">
                     <div className="small text-muted">Supplier</div>
-                    <div className="fw-semibold">{viewPO.supplier_name}</div>
+                    <div className="fw-bold text-dark">{viewPO.supplier_name}</div>
                   </div>
                   <div className="col-6 col-md-3">
-                    <div className="small text-muted">Destination</div>
-                    <div className="fw-semibold">{viewPO.destination_name}</div>
+                    <div className="small text-muted">Destination Hub</div>
+                    <div className="fw-bold text-dark">{viewPO.destination_name}</div>
                   </div>
                   <div className="col-6 col-md-3">
                     <div className="small text-muted">Status</div>
-                    <div><StatusBadge status={viewPO.status} /></div>
+                    <div>
+                      <StatusBadge status={viewPO.status} />
+                    </div>
                   </div>
                   <div className="col-6 col-md-3">
-                    <div className="small text-muted">Actual Received Date</div>
-                    <div className="small">{viewPO.actual_delivery_date ? new Date(viewPO.actual_delivery_date).toLocaleString('en-IN') : 'Pending'}</div>
+                    <div className="small text-muted">Actual Delivery</div>
+                    <div className="fw-medium text-dark small">
+                      {viewPO.actual_delivery_date
+                        ? new Date(viewPO.actual_delivery_date).toLocaleString('en-IN')
+                        : 'Pending Arrival'}
+                    </div>
                   </div>
                 </div>
 
-                <h6 className="fw-bold mb-2">Procured Line Items</h6>
-                <div className="table-responsive border rounded mb-3">
-                  <table className="table table-sm table-striped mb-0">
-                    <thead className="table-light">
+                <h6 className="fw-bold mb-2 text-dark">Procured Line Items</h6>
+                <div className="table-responsive border rounded-3 overflow-hidden mb-3">
+                  <table className="table table-hover align-middle mb-0">
+                    <thead>
                       <tr>
-                        <th>Product SKU</th>
+                        <th>SKU</th>
                         <th>Product Name</th>
                         <th className="text-center">Ordered</th>
                         <th className="text-center">Received</th>
@@ -728,33 +800,39 @@ export const Suppliers = () => {
                       {viewPO.items && viewPO.items.length > 0 ? (
                         viewPO.items.map((it) => (
                           <tr key={it.id}>
-                            <td className="fw-bold text-primary">{it.product_sku}</td>
-                            <td>{it.product_name}</td>
+                            <td className="fw-bold" style={{ color: '#059669' }}>
+                              {it.product_sku}
+                            </td>
+                            <td className="text-dark fw-medium">{it.product_name}</td>
                             <td className="text-center">{it.quantity_ordered}</td>
-                            <td className="text-center fw-bold">{it.quantity_received}</td>
-                            <td className="text-end">{formatINR(it.unit_cost)}</td>
-                            <td className="text-end fw-semibold">{formatINR(it.subtotal)}</td>
+                            <td className="text-center fw-bold text-success">{it.quantity_received}</td>
+                            <td className="text-end text-muted">{formatINR(it.unit_cost)}</td>
+                            <td className="text-end fw-bold text-dark">{formatINR(it.subtotal)}</td>
                           </tr>
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="6" className="text-center py-2 text-muted">No items</td>
+                          <td colSpan="6" className="text-center py-3 text-muted small">
+                            No items recorded in this PO.
+                          </td>
                         </tr>
                       )}
                       <tr className="table-light fw-bold">
                         <td colSpan="5" className="text-end">Total PO Amount:</td>
-                        <td className="text-end text-primary h6 mb-0">{formatINR(viewPO.total_amount)}</td>
+                        <td className="text-end h5 mb-0" style={{ color: '#059669' }}>
+                          {formatINR(viewPO.total_amount)}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
               </div>
-              <div className="modal-footer d-flex justify-content-between">
+              <div className="modal-footer bg-light d-flex justify-content-between">
                 <div>
                   {(viewPO.status === 'ORDERED' || viewPO.status === 'DRAFT') && (
                     <button
                       onClick={() => handleReceivePO(viewPO.id)}
-                      className="btn btn-success btn-sm"
+                      className="btn btn-primary btn-sm px-3"
                     >
                       Receive Stock into Warehouse
                     </button>
