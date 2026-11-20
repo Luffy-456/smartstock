@@ -19,7 +19,9 @@ services:
       - key: DATABASE_URL
         sync: false
       - key: CORS_ALLOW_ALL
-        value: "True"
+        value: "False"
+      - key: CORS_ALLOWED_ORIGINS
+        value: "https://luffy-456.github.io"
       - key: JWT_ACCESS_TOKEN_LIFETIME_MINUTES
         value: "60"
       - key: JWT_REFRESH_TOKEN_LIFETIME_DAYS

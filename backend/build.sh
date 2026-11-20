@@ -11,6 +11,3 @@ python manage.py collectstatic --no-input
 
 # Apply database migrations to Supabase PostgreSQL
 python manage.py migrate
-
-# Seed database with initial roles, demo accounts, and stock if not already present
-python manage.py seed_data
