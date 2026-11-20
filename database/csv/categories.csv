@@ -1,0 +1,13 @@
+id,name,code,description,parent_category_id
+1,Electronics & Appliances,CAT-ELEC,Consumer electronics accessories and home appliances,
+2,Smartphones & Tablets,CAT-MOB,Mobile phones accessories and tablets,1
+3,Computing & Laptops,CAT-COMP,Laptops monitors keyboards and peripherals,1
+4,Fashion & Apparel,CAT-FASH,Men women and kids ethnic and western apparel,
+5,Men Fashion,CAT-MEN,Shirts jeans ethnic kurtas and footwear,4
+6,Women Fashion,CAT-WOMEN,Sarees kurtis dresses and footwear,4
+7,Groceries & Staples,CAT-GROC,Daily essentials pulses edible oils spices,
+8,Home & Kitchen,CAT-HOME,Cookware dinnerware home decor and storage,
+9,Health & Personal Care,CAT-HLTH,Skincare haircare hygiene and wellness,
+10,Sports & Fitness,CAT-SPRT,Exercise gear cricket equipment and sportswear,
+11,Stationery & Books,CAT-STAT,Office supplies notebook sets books,
+12,Industrial Hardware & DIY,CAT-IND-SPEC,Heavy engineering tools and maintenance equipment,

@@ -1,0 +1,13 @@
+id,name,contact_person,email,phone,address,city,state,pincode,gstin,lead_time_days,rating,is_active
+1,Demo Supplier 01,Demo Contact 01,supplier01@example.com,+91 00000 00011,Sample business address 01,Noida,Uttar Pradesh,000000,,5,4.80,true
+2,Demo Supplier 02,Demo Contact 02,supplier02@example.com,+91 00000 00012,Sample business address 02,Mumbai,Maharashtra,000000,,4,4.90,true
+3,Demo Supplier 03,Demo Contact 03,supplier03@example.com,+91 00000 00013,Sample business address 03,Thane,Maharashtra,000000,,7,4.60,true
+4,Demo Supplier 04,Demo Contact 04,supplier04@example.com,+91 00000 00014,Sample business address 04,New Delhi,Delhi,000000,,6,4.75,true
+5,Demo Supplier 05,Demo Contact 05,supplier05@example.com,+91 00000 00015,Sample business address 05,Bengaluru,Karnataka,000000,,8,4.50,true
+6,Demo Supplier 06,Demo Contact 06,supplier06@example.com,+91 00000 00016,Sample business address 06,Bengaluru,Karnataka,000000,,5,4.65,true
+7,Demo Supplier 07,Demo Contact 07,supplier07@example.com,+91 00000 00017,Sample business address 07,Mumbai,Maharashtra,000000,,4,4.85,true
+8,Demo Supplier 08,Demo Contact 08,supplier08@example.com,+91 00000 00018,Sample business address 08,Meerut,Uttar Pradesh,000000,,9,4.40,true
+9,Demo Supplier 09,Demo Contact 09,supplier09@example.com,+91 00000 00019,Sample business address 09,Kolkata,West Bengal,000000,,3,4.70,true
+10,Demo Supplier 10,Demo Contact 10,supplier10@example.com,+91 00000 00020,Sample business address 10,New Delhi,Delhi,000000,,10,4.30,true
+11,Demo Supplier 11,Demo Contact 11,supplier11@example.com,+91 00000 00021,Sample business address 11,Mumbai,Maharashtra,000000,,6,4.55,true
+12,Demo Supplier 12,Demo Contact 12,supplier12@example.com,+91 00000 00022,Sample business address 12,Jaipur,Rajasthan,000000,,14,3.20,true

@@ -1,0 +1,22 @@
+# Django & DRF
+Django>=5.0.0
+djangorestframework>=3.15.0
+djangorestframework-simplejwt>=5.3.0
+django-cors-headers>=4.3.1
+django-filter>=24.2
+
+# Database & Supabase PostgreSQL support
+dj-database-url>=2.1.0
+psycopg2-binary>=2.9.9; python_version < '3.13'
+psycopg[binary]>=3.1.18; python_version >= '3.13'
+
+# Production Hosting on Render
+gunicorn>=21.2.0
+whitenoise>=6.6.0
+
+# Environment & Utilities
+python-dotenv>=1.0.1
+
+# Testing
+pytest>=8.0.0
+pytest-django>=4.8.0

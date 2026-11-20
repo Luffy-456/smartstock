@@ -1,0 +1,5 @@
+id,name,description
+1,Admin,Superuser with full administrative access across all modules and settings
+2,Warehouse Manager,Manages warehouse inventory levels stock transfers and incoming supplier POs
+3,Store Associate,Retail store staff handling in-store sales orders stock requests and adjustments
+4,Inventory Auditor,Read-only analyst role with stock adjustment and audit verification privileges

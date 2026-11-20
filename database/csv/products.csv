@@ -1,0 +1,17 @@
+id,sku,name,category_id,supplier_id,unit_of_measure,cost_price,selling_price,reorder_point,safety_stock,status
+1,SKU-ELEC-BOAT-A450,boAt Airdopes 450 TWS Wireless Earbuds,2,4,piece,1199.00,1999.00,25,10,ACTIVE
+2,SKU-ELEC-HAV-IR10,Havells Dor 1100W Heavyweight Dry Iron,1,1,piece,850.00,1349.00,15,5,ACTIVE
+3,SKU-FASH-RAY-SH01,Raymond Men Formal Slim Fit Cotton Shirt,5,3,piece,1250.00,2499.00,20,8,ACTIVE
+4,SKU-FASH-FAB-KU01,FabIndia Handloom Tussar Silk Kurti,6,10,piece,1800.00,3590.00,12,4,ACTIVE
+5,SKU-GROC-TATA-TEA,Tata Tea Gold Leaf Pouch 1kg,7,2,kg,420.00,560.00,50,20,ACTIVE
+6,SKU-HOME-PRES-CK05,Prestige Deluxe Alpha Stainless Steel Cooker 5L,8,5,piece,2100.00,3150.00,15,6,ACTIVE
+7,SKU-HLTH-HIM-FW01,Himalaya Purifying Neem Face Wash 400ml,9,6,piece,240.00,375.00,40,15,ACTIVE
+8,SKU-SPRT-SG-BAT01,SG Savage English Willow Cricket Bat Full Size,10,8,piece,6200.00,10499.00,8,3,ACTIVE
+9,SKU-STAT-ITC-NB06,Classmate Spiral Bound Notebook A4 Pack of 6,11,9,box,390.00,600.00,30,10,ACTIVE
+10,SKU-HOME-MIL-BOT1,Milton Thermosteel Flip Lid Flask 1000ml,8,11,piece,680.00,1099.00,35,12,ACTIVE
+11,SKU-ELEC-BOAT-SPK1,boAt Stone 650 10W Bluetooth Speaker,1,4,piece,1100.00,1899.00,20,8,ACTIVE
+12,SKU-HLTH-GOD-SOAP,Godrej Cinthol Original Deodorant Soap Pack of 6,9,7,box,180.00,270.00,50,20,ACTIVE
+13,SKU-GROC-TATA-DAL,Tata Sampann Unpolished Toor Dal 1kg,7,2,kg,145.00,195.00,60,25,ACTIVE
+14,SKU-COMP-LOGI-KB01,Wireless Multi-Device Keyboard K380 Compact,3,4,piece,1950.00,2995.00,15,5,ACTIVE
+15,SKU-RAW-GENERIC-COTTON,Raw Organic Carded Cotton Fibre Batch 50kg,4,12,kg,4999.00,5000.00,5,0,ACTIVE
+16,SKU-ELEC-BOAT-A450-V1,boAt Airdopes 450 TWS Wireless Earbuds Gen 1,2,4,piece,999.00,1499.00,0,0,DISCONTINUED

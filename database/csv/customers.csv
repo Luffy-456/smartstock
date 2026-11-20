@@ -1,0 +1,16 @@
+id,name,email,phone,city,state,pincode
+1,Demo Customer 01,customer01@example.com,+91 00000 00101,Mumbai,Maharashtra,000000
+2,Demo Customer 02,customer02@example.com,+91 00000 00102,Kolkata,West Bengal,000000
+3,Demo Customer 03,customer03@example.com,+91 00000 00103,Chennai,Tamil Nadu,000000
+4,Demo Customer 04,customer04@example.com,+91 00000 00104,New Delhi,Delhi,000000
+5,Demo Customer 05,customer05@example.com,+91 00000 00105,Bengaluru,Karnataka,000000
+6,Demo Customer 06,customer06@example.com,+91 00000 00106,Gurugram,Haryana,000000
+7,Demo Customer 07,customer07@example.com,+91 00000 00107,Jaipur,Rajasthan,000000
+8,Demo Customer 08,customer08@example.com,+91 00000 00108,Pune,Maharashtra,000000
+9,Demo Customer 09,customer09@example.com,+91 00000 00109,Ahmedabad,Gujarat,000000
+10,Demo Customer 10,customer10@example.com,+91 00000 00110,Hyderabad,Telangana,000000
+11,Demo Customer 11,customer11@example.com,+91 00000 00111,Pune,Maharashtra,000000
+12,Demo Customer 12,customer12@example.com,+91 00000 00112,Gurugram,Haryana,000000
+13,Demo Customer 13,customer13@example.com,+91 00000 00113,Kolkata,West Bengal,000000
+14,Demo Customer 14,customer14@example.com,+91 00000 00114,Lucknow,Uttar Pradesh,000000
+15,Demo Customer 15,,+91 00000 00115,Madurai,Tamil Nadu,000000

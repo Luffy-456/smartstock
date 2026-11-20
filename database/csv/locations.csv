@@ -1,0 +1,11 @@
+id,name,code,location_type,address,city,state,pincode,contact_phone,manager_name,is_active
+1,Demo Warehouse 01,WH-BHIW-01,WAREHOUSE,Sample warehouse address 01,Bhiwandi,Maharashtra,000000,+91 00000 00031,Demo Manager 01,true
+2,Demo Warehouse 02,WH-GUR-01,WAREHOUSE,Sample warehouse address 02,Gurugram,Haryana,000000,+91 00000 00032,Demo Manager 02,true
+3,Demo Warehouse 03,WH-BLR-01,WAREHOUSE,Sample warehouse address 03,Bengaluru,Karnataka,000000,+91 00000 00033,Demo Manager 03,true
+4,Demo Warehouse 04,WH-KOL-01,WAREHOUSE,Sample warehouse address 04,Hooghly,West Bengal,000000,+91 00000 00034,Demo Manager 04,true
+5,Demo Store 01,STR-MUM-01,STORE,Sample store address 01,Mumbai,Maharashtra,000000,+91 00000 00035,Demo Manager 05,true
+6,Demo Store 02,STR-DEL-01,STORE,Sample store address 02,New Delhi,Delhi,000000,+91 00000 00036,Demo Manager 06,true
+7,Demo Store 03,STR-BLR-01,STORE,Sample store address 03,Bengaluru,Karnataka,000000,+91 00000 00037,Demo Manager 07,true
+8,Demo Store 04,STR-CHE-01,STORE,Sample store address 04,Chennai,Tamil Nadu,000000,+91 00000 00038,Demo Manager 08,true
+9,Demo Store 05,STR-HYD-01,STORE,Sample store address 05,Hyderabad,Telangana,000000,+91 00000 00039,Demo Manager 09,true
+10,Demo Store 06,STR-KOL-01,STORE,Sample store address 06,Kolkata,West Bengal,000000,+91 00000 00040,Demo Manager 10,true

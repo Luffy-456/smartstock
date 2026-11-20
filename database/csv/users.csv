@@ -1,0 +1,13 @@
+id,username,email,first_name,last_name,phone,role_id,is_active
+1,demo_admin,admin@example.com,Demo,Admin,+91 00000 00001,1,true
+2,demo_wh_manager,warehouse@example.com,Demo,Warehouse Manager,+91 00000 00002,2,true
+3,demo_store_associate,store@example.com,Demo,Store Associate,+91 00000 00003,3,true
+4,demo_auditor,auditor@example.com,Demo,Auditor,+91 00000 00004,4,true
+5,demo_user_05,user05@example.com,Demo,User 05,+91 00000 00005,3,true
+6,demo_user_06,user06@example.com,Demo,User 06,+91 00000 00006,3,true
+7,demo_user_07,user07@example.com,Demo,User 07,+91 00000 00007,3,true
+8,demo_user_08,user08@example.com,Demo,User 08,+91 00000 00008,3,true
+9,demo_user_09,user09@example.com,Demo,User 09,+91 00000 00009,3,true
+10,demo_user_10,user10@example.com,Demo,User 10,+91 00000 00010,4,true
+11,demo_user_11,user11@example.com,Demo,User 11,+91 00000 00011,2,true
+12,demo_user_12,user12@example.com,Demo,User 12,+91 00000 00012,3,true
